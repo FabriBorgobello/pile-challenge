@@ -2,13 +2,13 @@ import { z } from 'zod';
 
 export const transferSchema = z.object({
   id: z.string().uuid(),
-  source: z.string().length(22),
+  source: z.string().min(1),
   amount: z.number().positive(),
-  recipientName: z.string(),
+  recipientName: z.string().min(1),
   targetIBAN: z.string().length(22),
   targetBIC: z.string().length(8),
-  reference: z.string(),
-  createdAt: z.string().transform((v) => new Date(v)),
+  reference: z.string().min(1),
+  createdAt: z.string(),
 });
 
 export const transferCreateSchema = transferSchema.omit({

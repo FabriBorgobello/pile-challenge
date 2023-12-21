@@ -1,4 +1,4 @@
-import { BadRequestError, NotFoundError } from '@/utils/ApiError';
+import { InvalidZodError, NotFoundError } from '@/utils/ApiError';
 import { Account, balanceSchema } from './account.schema';
 import { data } from './accounts.json';
 
@@ -10,9 +10,9 @@ export async function getAccounts() {
 
 export async function updateBalance(id: Account['id'], balance: number) {
   // Validate balance according to our predefined schema
-  const parsed = balanceSchema.safeParse(balance);
-  if (!parsed.success) {
-    throw new BadRequestError('Invalid balance');
+  const safeBalance = balanceSchema.safeParse(balance);
+  if (!safeBalance.success) {
+    throw new InvalidZodError(safeBalance.error);
   }
   // Query the database for the account
   const account = accounts.find((a) => a.id === id);
@@ -20,6 +20,6 @@ export async function updateBalance(id: Account['id'], balance: number) {
     throw new NotFoundError(`Account ${id} not found`);
   }
 
-  account.balances.available.value = Number(parsed.data.toFixed(2));
+  account.balances.available.value = Number(safeBalance.data.toFixed(2));
   return account;
 }

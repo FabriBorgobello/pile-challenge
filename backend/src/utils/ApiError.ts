@@ -1,3 +1,5 @@
+import { ZodError } from 'zod';
+
 export class ApiError extends Error {
   statusCode: number;
 
@@ -13,8 +15,13 @@ export class NotFoundError extends ApiError {
   }
 }
 
-export class BadRequestError extends ApiError {
-  constructor(message: string = 'Invalid request') {
-    super(message, 400);
+/**
+ * This error is thrown when a Zod validation fails.
+ * It is used to return a more user-friendly error message.
+ * @example throw new InvalidZodError(safeJson.error);
+ */
+export class InvalidZodError extends ApiError {
+  constructor(err: ZodError) {
+    super(err.issues.map((i) => `${i.path}: ${i.message}`).join('. ') || 'Invalid request', 400);
   }
 }

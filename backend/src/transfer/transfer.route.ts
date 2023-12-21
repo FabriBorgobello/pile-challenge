@@ -1,19 +1,11 @@
 import { Hono } from 'hono';
+import { TransferCreate } from './transfer.schema';
+import { createTransfer } from './transfer.controller';
 
 export const transferRouter = new Hono();
 
-transferRouter.get('/', async (c) => {
-  return c.json({ message: 'Not implemented' }, 501);
-});
-transferRouter.get('/:id', async (c) => {
-  return c.json({ message: 'Not implemented' }, 501);
-});
 transferRouter.post('/', async (c) => {
-  return c.json({ message: 'Not implemented' }, 501);
-});
-transferRouter.put('/:id', async (c) => {
-  return c.json({ message: 'Not implemented' }, 501);
-});
-transferRouter.delete('/:id', async (c) => {
-  return c.json({ message: 'Not implemented' }, 501);
+  const body = await c.req.json<TransferCreate>();
+  const transfer = await createTransfer(body);
+  return c.json(transfer, 201);
 });

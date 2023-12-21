@@ -21,8 +21,6 @@ app.get('/', (c) => c.text('Pile Capital coding challenge API'));
 
 /** Error handler */
 app.onError((err, c) => {
-  // Logging and monitoring tools can be used here.
-
   // API error
   if (err instanceof ApiError) {
     return c.json({ error: err.message }, err.statusCode);
