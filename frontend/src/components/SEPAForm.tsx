@@ -9,9 +9,9 @@ import { TransferInsert } from '../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { transferInsertSchema } from '../schemas/transfer.schema';
 import { ErrorMessage } from './ErrorMessage';
-import { useAccount } from '../hooks/useAccounts';
 import { useModal } from '../hooks/useModal';
 import toast from 'react-hot-toast';
+import { useAllAccounts } from '../hooks/useAllAccounts';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
   source: '',
@@ -23,7 +23,7 @@ const TRANSFER_DEFAULT_VALUES: TransferInsert = {
 };
 
 export default function SEPAForm() {
-  const { accounts } = useAccount();
+  const accounts = useAllAccounts();
 
   const { closeModal } = useModal();
   const { handleSubmit, register, formState } = useForm<TransferInsert>({
