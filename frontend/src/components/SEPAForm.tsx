@@ -10,6 +10,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { transferInsertSchema } from '../schemas/transfer.schema';
 import { ErrorMessage } from './ErrorMessage';
 import { useAccount } from '../hooks/useAccounts';
+import { useModal } from '../hooks/useModal';
+import { useBalance } from '../hooks/useBalance';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
   source: '',
@@ -21,15 +23,32 @@ const TRANSFER_DEFAULT_VALUES: TransferInsert = {
 };
 
 export default function SEPAForm() {
-  const { data: accounts } = useAccount();
+  const { data: accounts, fetchData: fetchAccounts } = useAccount();
+  const { fetchData: fetchBalance } = useBalance();
+
+  const { closeModal } = useModal();
   const { handleSubmit, register, formState } = useForm<TransferInsert>({
     defaultValues: TRANSFER_DEFAULT_VALUES,
     resolver: zodResolver(transferInsertSchema),
     mode: 'onBlur',
   });
 
-  const onSubmit = (data: TransferInsert) => {
-    console.log(data);
+  const onSubmit = async (data: TransferInsert) => {
+    try {
+      const res = await fetch('http://localhost:3000/transfer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        throw new Error('Something went wrong');
+      }
+      closeModal();
+      fetchAccounts();
+      fetchBalance();
+    } catch (error) {
+      // Show error message
+    }
   };
 
   return (

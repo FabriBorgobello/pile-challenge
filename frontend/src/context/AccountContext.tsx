@@ -32,5 +32,9 @@ export const AccountsProvider = ({ children }: { children: React.ReactNode }) =>
     fetchAccounts();
   }, []);
 
-  return <AccountContext.Provider value={{ data: accounts, state, error }}>{children}</AccountContext.Provider>;
+  return (
+    <AccountContext.Provider value={{ data: accounts, state, error, fetchData: fetchAccounts }}>
+      {children}
+    </AccountContext.Provider>
+  );
 };

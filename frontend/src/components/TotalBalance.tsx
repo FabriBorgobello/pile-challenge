@@ -2,13 +2,9 @@ import { useBalance } from '../hooks/useBalance';
 import { formatCurrency } from '../utils';
 
 export function TotalBalance() {
-  const { data: balance, error, status } = useBalance();
+  const { data: balance, state } = useBalance();
 
-  if (status === 'error') {
-    return <p>{error?.message || 'Unknown error'}</p>;
-  }
-
-  if (status === 'loading' || !balance) {
+  if (state !== 'success' || !balance) {
     return <BalanceSkeleton />;
   }
 

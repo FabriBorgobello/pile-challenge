@@ -23,5 +23,5 @@ export type DataContextType<T> = {
   data: T | null;
   state: LoadingState;
   error: Error | null;
-  fetchData?: () => void;
+  fetchData: () => void;
 };
