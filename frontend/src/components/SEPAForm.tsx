@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { accounts } from '../accounts';
 import { formatCurrency } from '../utils';
 import { Button } from './Button';
 import { Input } from './Input';
@@ -10,6 +9,7 @@ import { TransferInsert } from '../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { transferInsertSchema } from '../schemas/transfer.schema';
 import { ErrorMessage } from './ErrorMessage';
+import { useAccounts } from '../hooks/useAccounts';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
   source: '',
@@ -21,6 +21,7 @@ const TRANSFER_DEFAULT_VALUES: TransferInsert = {
 };
 
 export default function SEPAForm() {
+  const { data: accounts } = useAccounts();
   const { handleSubmit, register, formState } = useForm<TransferInsert>({
     defaultValues: TRANSFER_DEFAULT_VALUES,
     resolver: zodResolver(transferInsertSchema),
@@ -41,7 +42,7 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
           <Select id="source" error={Boolean(formState.errors.source)} {...register('source')}>
-            {accounts.data.map((account) => (
+            {accounts.map((account) => (
               <option key={account.id} value={account.id} className="flex justify-between">
                 {account.name} - (
                 {formatCurrency(account.balances.available.value, account.balances.available.currency)})
