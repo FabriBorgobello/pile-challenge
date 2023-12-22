@@ -23,12 +23,12 @@ export function AccountItemSkeleton() {
   return (
     <li className="flex animate-pulse flex-col gap-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
       <div className="flex items-center justify-between">
-        <div className="h-6 w-1/3 rounded-md bg-gray-300"></div> {/* Placeholder for account name */}
-        <div className="h-6 w-1/4 rounded-full bg-gray-300"></div> {/* Placeholder for country badge */}
+        <div className="h-6 w-1/3 rounded-md bg-gray-300"></div>
+        <div className="h-6 w-1/4 rounded-full bg-gray-300"></div>
       </div>
       <div className="flex items-center justify-between gap-x-2">
-        <div className="h-4 w-1/4 rounded-md bg-gray-300"></div> {/* Placeholder for currency and value */}
-        <div className="h-4 w-1/2 rounded-md bg-gray-300"></div> {/* Placeholder for IBAN */}
+        <div className="h-4 w-1/4 rounded-md bg-gray-300"></div>
+        <div className="h-4 w-1/2 rounded-md bg-gray-300"></div>
       </div>
     </li>
   );
