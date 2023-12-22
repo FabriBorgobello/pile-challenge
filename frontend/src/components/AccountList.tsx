@@ -10,6 +10,7 @@ const SEPAForm = lazy(() => import('./SEPAForm'));
 
 export function AccountList() {
   const { data: accounts, error, status } = useAccounts();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (status === 'error') {

@@ -23,3 +23,10 @@ export async function updateBalance(id: Account['id'], balance: number) {
   account.balances.available.value = Number(safeBalance.data.toFixed(2));
   return account;
 }
+
+export async function getBalance() {
+  const total = accounts.reduce((acc, account) => {
+    return acc + account.balances.available.value;
+  }, 0);
+  return { balance: total, currency: 'EUR', count: accounts.length };
+}

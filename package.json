@@ -1,0 +1,9 @@
+{
+  "name": "pile-challenge",
+  "description": "Pile Capital coding challenge",
+  "author": "Fabricio Borgobello",
+  "scripts": {
+    "start:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm run dev"
+  }
+}

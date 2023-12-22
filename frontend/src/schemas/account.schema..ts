@@ -1,22 +1,17 @@
 import { z } from 'zod';
 
+export const balanceSchema = z.number().positive();
+
 export const accountSchema = z.object({
-  IBAN: z.string().min(22),
+  IBAN: z.string().length(22),
   balances: z.object({
     available: z.object({
-      value: z.number(),
+      value: balanceSchema,
       currency: z.string().length(3),
     }),
   }),
   country: z.string().length(3),
   createdAt: z.string(),
-  id: z.string(),
+  id: z.string().uuid(),
   name: z.string(),
 });
-
-export const accountInsertSchema = accountSchema.omit({
-  id: true,
-  createdAt: true,
-});
-
-export const accountUpdateSchema = accountInsertSchema.partial();

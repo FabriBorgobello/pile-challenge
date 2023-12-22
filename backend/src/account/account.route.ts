@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getAccounts, updateBalance } from './account.controller';
+import { getAccounts, getBalance, updateBalance } from './account.controller';
 
 export const accountRouter = new Hono();
 
@@ -15,4 +15,10 @@ accountRouter.put('/:id/balance', async (c) => {
   const body = await c.req.json<{ balance: number }>();
   const account = await updateBalance(id, body.balance);
   return c.json(account);
+});
+
+/** Get balance */
+accountRouter.get('/balance', async (c) => {
+  const balance = await getBalance();
+  return c.json(balance);
 });
