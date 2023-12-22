@@ -18,19 +18,19 @@ interface FilterValues {
 }
 
 export function FilterPopover() {
-  const { data, fetchData } = useAccount();
+  const { highestBalance, applyFilters } = useAccount();
   const [open, setOpen] = useState(false);
   const methods = useForm<FilterValues>({
     values: {
       minBalance: 0,
-      maxBalance: data?.highestBalance || 0,
+      maxBalance: highestBalance || 0,
     },
     resolver: zodResolver(accountQuerySchema),
   });
 
   async function onSubmit(data: FilterValues) {
     try {
-      await fetchData(data);
+      applyFilters({ ...data });
       setOpen(false);
       toast.success('Filter applied');
     } catch (error) {
@@ -46,7 +46,7 @@ export function FilterPopover() {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
-          className="data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade w-[260px] rounded border border-gray-100 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 "
+          className="w-[260px] rounded border border-gray-100 bg-white p-6 data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade dark:border-gray-700 dark:bg-gray-800 "
           sideOffset={5}
         >
           <FormProvider {...methods}>
@@ -71,10 +71,10 @@ export function FilterPopover() {
 }
 
 function BalanceFilter() {
-  const { data } = useAccount();
+  const { highestBalance } = useAccount();
   const { watch, formState, setValue } = useFormContext();
   const min = 0;
-  const max = data?.highestBalance || 0;
+  const max = highestBalance;
 
   return (
     <div>
