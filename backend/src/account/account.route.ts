@@ -1,14 +1,19 @@
 import { Hono } from 'hono';
 import { getAccounts, getBalance, updateBalance } from './account.controller';
 import { accountFilterSchema } from './account.schema';
+import { InvalidZodError } from '@/utils/ApiError';
 
 export const accountRouter = new Hono();
 
 /** List all accounts */
 accountRouter.get('/', async (c) => {
-  const query = c.req.query();
-  const safeQuery = accountFilterSchema.parse(query);
-  const accounts = await getAccounts(safeQuery);
+  const safeQuery = accountFilterSchema.safeParse(c.req.query());
+
+  if (!safeQuery.success) {
+    throw new InvalidZodError(safeQuery.error);
+  }
+
+  const accounts = await getAccounts(safeQuery.data);
   return c.json(accounts);
 });
 

@@ -30,10 +30,7 @@ export function FilterPopover() {
 
   async function onSubmit(data: FilterValues) {
     try {
-      await fetchData({
-        minBalance: data.minBalance,
-        maxBalance: data.maxBalance,
-      });
+      await fetchData(data);
       setOpen(false);
       toast.success('Filter applied');
     } catch (error) {
