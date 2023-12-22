@@ -3,16 +3,16 @@ import { clsx } from 'clsx';
 
 interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
-  onClose: () => void;
+  onCloseModal: () => void;
 }
 
-export function Modal({ isOpen, onClose, children }: ModalProps) {
+export function Modal({ isOpen, onCloseModal, children }: ModalProps) {
   const modalContentRef = useRef<HTMLDivElement>(null);
 
   // Close modal when clicking outside of it.
   const handleClickOutside = (event: MouseEvent<HTMLDivElement>) => {
     if (modalContentRef.current && event.target instanceof Node && !modalContentRef.current.contains(event.target)) {
-      onClose();
+      onCloseModal();
     }
   };
 
@@ -28,7 +28,7 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
         <div className="relative bg-white rounded-lg shadow-2xl w-96 dark:bg-black" ref={modalContentRef}>
           {children}
           <button
-            onClick={onClose}
+            onClick={onCloseModal}
             className="absolute top-1 right-2 p-2 rounded-full text-black hover:bg-gray-200 transition-all dark:text-white dark:hover:bg-gray-800"
           >
             X

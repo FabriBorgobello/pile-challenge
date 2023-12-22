@@ -9,19 +9,19 @@ import { TransferInsert } from '../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { transferInsertSchema } from '../schemas/transfer.schema';
 import { ErrorMessage } from './ErrorMessage';
-import { useAccounts } from '../hooks/useAccounts';
+import { useAccount } from '../hooks/useAccounts';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
   source: '',
   amount: 1,
-  recipient: '',
+  recipientName: '',
   targetIBAN: '',
   targetBIC: '',
   reference: '',
 };
 
 export default function SEPAForm() {
-  const { data: accounts } = useAccounts();
+  const { data: accounts } = useAccount();
   const { handleSubmit, register, formState } = useForm<TransferInsert>({
     defaultValues: TRANSFER_DEFAULT_VALUES,
     resolver: zodResolver(transferInsertSchema),
@@ -42,12 +42,14 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
           <Select id="source" error={Boolean(formState.errors.source)} {...register('source')}>
-            {accounts.map((account) => (
-              <option key={account.id} value={account.id} className="flex justify-between">
-                {account.name} - (
-                {formatCurrency(account.balances.available.value, account.balances.available.currency)})
-              </option>
-            ))}
+            {accounts
+              ? accounts.map((account) => (
+                  <option key={account.id} value={account.id} className="flex justify-between">
+                    {account.name} - (
+                    {formatCurrency(account.balances.available.value, account.balances.available.currency)})
+                  </option>
+                ))
+              : null}
           </Select>
           {formState.errors.source && <ErrorMessage>{formState.errors.source.message}</ErrorMessage>}
         </div>
@@ -64,9 +66,14 @@ export default function SEPAForm() {
           {formState.errors.amount && <ErrorMessage>{formState.errors.amount.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-y-1">
-          <Label htmlFor="recipient">Recipient name</Label>
-          <Input type="text" id="recipient" error={Boolean(formState.errors.recipient)} {...register('recipient')} />
-          {formState.errors.recipient && <ErrorMessage>{formState.errors.recipient.message}</ErrorMessage>}
+          <Label htmlFor="recipientName">Recipient name</Label>
+          <Input
+            type="text"
+            id="recipientName"
+            error={Boolean(formState.errors.recipientName)}
+            {...register('recipientName')}
+          />
+          {formState.errors.recipientName && <ErrorMessage>{formState.errors.recipientName.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="targetIBAN">IBAN</Label>
