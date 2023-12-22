@@ -22,7 +22,10 @@ export function Modal({ children }: { children: React.ReactNode }) {
       onClick={handleClickOutside}
     >
       {isModalOpen && (
-        <div className="relative w-96 rounded-lg bg-white shadow-2xl dark:bg-black" ref={modalContentRef}>
+        <div
+          className="relative w-96 rounded-lg border border-gray-700 bg-white shadow-2xl dark:bg-gray-900"
+          ref={modalContentRef}
+        >
           {children}
           <button
             onClick={closeModal}

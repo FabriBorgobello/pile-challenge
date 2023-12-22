@@ -9,6 +9,8 @@ import { ModalProvider } from './context/ModalContext';
 import { BalanceProvider } from './context/BalanceContext';
 import { Toaster } from 'react-hot-toast';
 import { Actions } from './components/Actions';
+import { Footer } from './components/Footer';
+import { NavBar } from './components/NavBar';
 
 const SEPAForm = lazy(() => import('./components/SEPAForm'));
 
@@ -18,8 +20,9 @@ function App() {
       <AccountsProvider>
         <BalanceProvider>
           <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 py-8 sm:py-20">
-              <Title>Pile coding challenge</Title>
+            <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
+              <NavBar />
+              <Title>Welcome back, John!</Title>
               <TotalBalance />
               <Actions />
               <hr className="border-gray-200 dark:border-gray-800" />
@@ -31,6 +34,7 @@ function App() {
               </Modal>
               <Toaster />
             </div>
+            <Footer />
           </div>
         </BalanceProvider>
       </AccountsProvider>

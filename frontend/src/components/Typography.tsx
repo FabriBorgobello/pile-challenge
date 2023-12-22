@@ -1,5 +1,5 @@
 export function Title(props: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h1 {...props} className="text-3xl font-bold text-black dark:text-white" />;
+  return <h1 {...props} className="text-3xl font-bold text-black sm:text-5xl dark:text-white" />;
 }
 
 export function Subtitle(props: React.HTMLAttributes<HTMLHeadingElement>) {
@@ -7,7 +7,7 @@ export function Subtitle(props: React.HTMLAttributes<HTMLHeadingElement>) {
 }
 
 export function PrimaryText(props: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p {...props} className="text-lg text-gray-700 dark:text-gray-300" />;
+  return <p {...props} className="text-lg text-gray-800 dark:text-gray-300" />;
 }
 
 export function SecondaryText(props: React.HTMLAttributes<HTMLParagraphElement>) {

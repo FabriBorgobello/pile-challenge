@@ -6,7 +6,9 @@ export function Actions() {
 
   return (
     <div className="flex w-full justify-end gap-x-4">
-      <Button onClick={openModal}>Send money</Button>
+      <Button onClick={openModal} className="w-full sm:w-auto">
+        Send money
+      </Button>
     </div>
   );
 }
