@@ -16,7 +16,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = 'p
         variant === 'primary' && ' border-indigo-700 bg-indigo-700 text-white hover:bg-indigo-800',
         variant === 'secondary' && ' border-indigo-700 bg-white text-indigo-700 hover:bg-indigo-50',
         variant === 'text' &&
-          'border-none text-black underline hover:border-indigo-700 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-800',
+          'border-none text-black hover:border-indigo-700 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-800',
         restProps.className
       )}
     />
