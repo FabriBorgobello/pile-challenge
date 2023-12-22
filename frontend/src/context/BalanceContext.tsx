@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { Balance, DataContextType, LoadingState } from '../types';
 
-export const BalanceContext = createContext<DataContextType<Balance>>({
+export const BalanceContext = createContext<DataContextType<Balance, unknown>>({
   data: null,
   state: 'idle',
   error: null,
-  fetchData: () => {},
+  fetchData: () => new Promise(() => {}),
 });
 
 export const BalanceProvider = ({ children }: { children: React.ReactNode }) => {

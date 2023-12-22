@@ -1,11 +1,14 @@
 import { Hono } from 'hono';
 import { getAccounts, getBalance, updateBalance } from './account.controller';
+import { accountFilterSchema } from './account.schema';
 
 export const accountRouter = new Hono();
 
 /** List all accounts */
 accountRouter.get('/', async (c) => {
-  const accounts = await getAccounts();
+  const query = c.req.query();
+  const safeQuery = accountFilterSchema.parse(query);
+  const accounts = await getAccounts(safeQuery);
   return c.json(accounts);
 });
 

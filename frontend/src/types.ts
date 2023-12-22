@@ -19,9 +19,9 @@ export type Balance = {
 
 /** CONTEXT */
 export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
-export type DataContextType<T> = {
+export type DataContextType<T, R> = {
   data: T | null;
   state: LoadingState;
   error: Error | null;
-  fetchData: () => void;
+  fetchData: (query?: R) => Promise<void>;
 };

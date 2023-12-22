@@ -1,16 +1,25 @@
 import { InvalidZodError, NotFoundError } from '@/utils/ApiError';
-import { Account, balanceSchema } from './account.schema';
+import { Account, AccountFilter, balanceSchema } from './account.schema';
 import { data } from './accounts.json';
 
 const accounts: Account[] = data;
 
-export async function getAccounts() {
+export async function getAccounts({ minBalance = 0, maxBalance = Infinity }: AccountFilter) {
+  // Get filtered accounts
+  const accounts = data.filter((account) => {
+    const balance = account.balances.available.value;
+    return balance >= minBalance && balance <= maxBalance;
+  });
+
+  // Calculate highest balance to avoid doing it in the frontend
+  const highestBalance = data.reduce((acc, account) => {
+    return Math.max(acc, account.balances.available.value);
+  }, 0);
+
   return {
     accounts,
+    highestBalance,
     count: accounts.length,
-    highestBalance: accounts.reduce((acc, account) => {
-      return Math.max(acc, account.balances.available.value);
-    }, 0),
   };
 }
 

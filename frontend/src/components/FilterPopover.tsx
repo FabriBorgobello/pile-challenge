@@ -6,6 +6,11 @@ import { PrimaryText, SecondaryText } from './Typography';
 import { formatCurrency } from '../utils';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useAccount } from '../hooks/useAccounts';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { accountQuerySchema } from '../schemas/accountFilters.schema';
+import { ErrorMessage } from './ErrorMessage';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface FilterValues {
   minBalance: number;
@@ -13,21 +18,32 @@ interface FilterValues {
 }
 
 export function FilterPopover() {
-  const { data } = useAccount();
+  const { data, fetchData } = useAccount();
+  const [open, setOpen] = useState(false);
   const methods = useForm<FilterValues>({
     values: {
       minBalance: 0,
       maxBalance: data?.highestBalance || 0,
     },
+    resolver: zodResolver(accountQuerySchema),
   });
 
-  function onSubmit(data: FilterValues) {
-    console.log(data);
+  async function onSubmit(data: FilterValues) {
+    try {
+      await fetchData({
+        minBalance: data.minBalance,
+        maxBalance: data.maxBalance,
+      });
+      setOpen(false);
+      toast.success('Filter applied');
+    } catch (error) {
+      console.error(error);
+    }
   }
   console.log(methods.watch());
 
   return (
-    <Popover.Root>
+    <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
         <Button variant="text">Filter</Button>
       </Popover.Trigger>
@@ -59,7 +75,7 @@ export function FilterPopover() {
 
 function BalanceFilter() {
   const { data } = useAccount();
-  const methods = useFormContext();
+  const { watch, formState, setValue } = useFormContext();
   const min = 0;
   const max = data?.highestBalance || 0;
 
@@ -69,19 +85,19 @@ function BalanceFilter() {
       <div className="mb-6 flex flex-col justify-between text-black dark:text-white">
         <div className="flex justify-between">
           <SecondaryText>Min</SecondaryText>
-          <SecondaryText>{formatCurrency(methods.watch('minBalance'), 'EUR')}</SecondaryText>
+          <SecondaryText>{formatCurrency(watch('minBalance'), 'EUR')}</SecondaryText>
         </div>
         <div className="flex justify-between">
           <SecondaryText>Max</SecondaryText>
-          <SecondaryText>{formatCurrency(methods.watch('maxBalance'), 'EUR')}</SecondaryText>
+          <SecondaryText>{formatCurrency(watch('maxBalance'), 'EUR')}</SecondaryText>
         </div>
       </div>
       <Slider.Root
         onValueChange={(value) => {
-          methods.setValue('minBalance', value[0]);
-          methods.setValue('maxBalance', value[1]);
+          setValue('minBalance', value[0]);
+          setValue('maxBalance', value[1]);
         }}
-        value={[methods.watch('minBalance'), methods.watch('maxBalance')]}
+        value={[watch('minBalance'), watch('maxBalance')]}
         className="relative flex h-5 w-[200px] touch-none select-none items-center"
         min={min}
         max={max}
@@ -104,6 +120,8 @@ function BalanceFilter() {
         <span className="text-sm text-black opacity-60 dark:text-white">{min}</span>
         <span className="text-sm text-black opacity-60 dark:text-white">{max}</span>
       </div>
+      {formState.errors.minBalance && <ErrorMessage>{formState.errors.minBalance.message?.toString()}</ErrorMessage>}
+      {formState.errors.maxBalance && <ErrorMessage>{formState.errors.maxBalance.message?.toString()}</ErrorMessage>}
     </div>
   );
 }

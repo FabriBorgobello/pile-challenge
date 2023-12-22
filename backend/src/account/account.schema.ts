@@ -16,4 +16,10 @@ export const accountSchema = z.object({
   name: z.string(),
 });
 
+export const accountFilterSchema = z.object({
+  minBalance: z.coerce.number().positive().optional(),
+  maxBalance: z.coerce.number().positive().optional(),
+});
+
+export type AccountFilter = z.infer<typeof accountFilterSchema>;
 export type Account = z.infer<typeof accountSchema>;
