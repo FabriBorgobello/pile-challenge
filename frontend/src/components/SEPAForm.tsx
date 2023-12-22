@@ -24,7 +24,7 @@ const TRANSFER_DEFAULT_VALUES: TransferInsert = {
 };
 
 export default function SEPAForm() {
-  const { data: accounts, fetchData: fetchAccounts } = useAccount();
+  const { data, fetchData: fetchAccounts } = useAccount();
   const { fetchData: fetchBalance } = useBalance();
 
   const { closeModal } = useModal();
@@ -63,14 +63,12 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
           <Select id="source" error={Boolean(formState.errors.source)} {...register('source')}>
-            {accounts
-              ? accounts.map((account) => (
-                  <option key={account.id} value={account.id} className="flex justify-between">
-                    {account.name} - (
-                    {formatCurrency(account.balances.available.value, account.balances.available.currency)})
-                  </option>
-                ))
-              : null}
+            {data?.accounts.map((account) => (
+              <option key={account.id} value={account.id} className="flex justify-between">
+                {account.name} - (
+                {formatCurrency(account.balances.available.value, account.balances.available.currency)})
+              </option>
+            ))}
           </Select>
           {formState.errors.source && <ErrorMessage>{formState.errors.source.message}</ErrorMessage>}
         </div>

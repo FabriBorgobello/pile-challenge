@@ -5,8 +5,5 @@
   "scripts": {
     "start:backend": "cd backend && npm run dev",
     "start:frontend": "cd frontend && npm run dev"
-  },
-  "dependencies": {
-    "react-hot-toast": "^2.4.1"
   }
 }

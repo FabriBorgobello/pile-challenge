@@ -5,7 +5,13 @@ import { data } from './accounts.json';
 const accounts: Account[] = data;
 
 export async function getAccounts() {
-  return accounts;
+  return {
+    accounts,
+    count: accounts.length,
+    highestBalance: accounts.reduce((acc, account) => {
+      return Math.max(acc, account.balances.available.value);
+    }, 0),
+  };
 }
 
 export async function updateBalance(id: Account['id'], balance: number) {

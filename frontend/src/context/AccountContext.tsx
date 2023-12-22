@@ -1,7 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { Account, DataContextType, LoadingState } from '../types';
 
-export const AccountContext = createContext<DataContextType<Account[]>>({
+interface AccountResponse {
+  accounts: Account[];
+  count: number;
+  highestBalance: number;
+}
+
+export const AccountContext = createContext<DataContextType<AccountResponse>>({
   data: null,
   state: 'idle',
   error: null,
@@ -9,7 +15,7 @@ export const AccountContext = createContext<DataContextType<Account[]>>({
 });
 
 export const AccountsProvider = ({ children }: { children: React.ReactNode }) => {
-  const [accounts, setAccounts] = useState<Account[] | null>(null);
+  const [data, setData] = useState<AccountResponse | null>(null);
   const [state, setState] = useState<LoadingState>('idle');
   const [error, setError] = useState<Error | null>(null);
 
@@ -18,7 +24,7 @@ export const AccountsProvider = ({ children }: { children: React.ReactNode }) =>
     try {
       const response = await fetch('http://localhost:3000/account');
       const jsonAccounts = await response.json();
-      setAccounts(jsonAccounts);
+      setData(jsonAccounts);
       setState('success');
     } catch (error) {
       if (error instanceof Error) {
@@ -33,7 +39,7 @@ export const AccountsProvider = ({ children }: { children: React.ReactNode }) =>
   }, []);
 
   return (
-    <AccountContext.Provider value={{ data: accounts, state, error, fetchData: fetchAccounts }}>
+    <AccountContext.Provider value={{ data, state, error, fetchData: fetchAccounts }}>
       {children}
     </AccountContext.Provider>
   );

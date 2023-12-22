@@ -4,7 +4,7 @@ import { useAccount } from '../hooks/useAccounts';
 import { FilterPopover } from './FilterPopover';
 
 export function AccountList() {
-  const { data: accounts, state } = useAccount();
+  const { data, state } = useAccount();
 
   return (
     <div className="flex flex-col gap-y-2 overflow-y-hidden">
@@ -13,8 +13,8 @@ export function AccountList() {
         <FilterPopover />
       </div>
       <ul className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4">
-        {accounts && state === 'success'
-          ? accounts.map((account) => <AccountItem account={account} key={account.id} />)
+        {data?.accounts && state === 'success'
+          ? data?.accounts.map((account) => <AccountItem account={account} key={account.id} />)
           : Array.from({ length: 5 }).map((_, index) => <AccountItemSkeleton key={index} />)}
       </ul>
     </div>
