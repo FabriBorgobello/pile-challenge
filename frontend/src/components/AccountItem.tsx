@@ -23,15 +23,9 @@ export function AccountItem({ account }: { account: Account }) {
 
 export function AccountItemSkeleton() {
   return (
-    <li className="flex animate-pulse flex-col gap-y-2 rounded-md border border-gray-200 p-4 dark:border-gray-800">
-      <div className="flex items-center justify-between">
-        <div className="h-6 w-1/3 rounded-md bg-gray-300"></div>
-        <div className="h-6 w-1/4 rounded-full bg-gray-300"></div>
-      </div>
-      <div className="flex items-center justify-between gap-x-2">
-        <div className="h-4 w-1/4 rounded-md bg-gray-300"></div>
-        <div className="h-4 w-1/2 rounded-md bg-gray-300"></div>
-      </div>
+    <li className="flex flex-col gap-y-2 rounded-md border border-gray-200 bg-white  px-4 py-6 dark:border-gray-800 dark:bg-gray-800">
+      <div className="mb-2 h-4 w-1/4 rounded bg-gray-300"></div>
+      <div className="h-4 w-1/3 rounded bg-gray-300"></div>
     </li>
   );
 }

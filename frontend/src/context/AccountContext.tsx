@@ -41,6 +41,8 @@ export const AccountsProvider = ({ children }: AccountsProviderProps) => {
   // Function to fetch accounts
   const fetchAccounts = useCallback(async () => {
     setLoading('pending');
+    setError(null);
+    setAccounts([]);
     try {
       const response = await fetch(`http://localhost:3000/account?limit=${limit}&offset=${offset}`);
       if (!response.ok) {
