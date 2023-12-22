@@ -1,9 +1,9 @@
 export function Title(props: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h1 {...props} className="text-3xl font-bold dark:text-white text-black" />;
+  return <h1 {...props} className="text-3xl font-bold text-black dark:text-white" />;
 }
 
 export function Subtitle(props: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 {...props} className="text-2xl font-bold dark:text-white text-black" />;
+  return <h2 {...props} className="text-2xl font-bold text-black dark:text-white" />;
 }
 
 export function PrimaryText(props: React.HTMLAttributes<HTMLParagraphElement>) {

@@ -9,9 +9,9 @@ export function TotalBalance() {
   }
 
   return (
-    <div className="flex flex-col text-center sm:text-left gap-y-1 bg-black dark:bg-white rounded-xl p-4">
+    <div className="flex flex-col gap-y-1 rounded-xl bg-black p-4 text-center sm:text-left dark:bg-white">
       <h2 className="text-white dark:text-black">Total balance</h2>
-      <p className="text-white text-3xl sm:text-4xl dark:text-black">
+      <p className="text-3xl text-white sm:text-4xl dark:text-black">
         {balance && formatCurrency(balance.balance, balance.currency)}
       </p>
     </div>
@@ -20,9 +20,9 @@ export function TotalBalance() {
 
 function BalanceSkeleton() {
   return (
-    <div className="flex flex-col text-center sm:text-left gap-y-1 bg-black dark:bg-white rounded-xl p-4 animate-pulse">
-      <div className="h-6 bg-gray-300 rounded-md w-1/3 self-center sm:self-start"></div>
-      <div className="h-10 bg-gray-300 rounded-md w-full"></div>
+    <div className="flex animate-pulse flex-col gap-y-1 rounded-xl bg-black p-4 text-center sm:text-left dark:bg-white">
+      <div className="h-6 w-1/3 self-center rounded-md bg-gray-300 sm:self-start"></div>
+      <div className="h-10 w-full rounded-md bg-gray-300"></div>
     </div>
   );
 }

@@ -10,11 +10,11 @@ export function AccountList() {
 
   return (
     <div className="flex flex-col gap-y-4 overflow-y-hidden">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Subtitle>Accounts</Subtitle>
         <Button onClick={openModal}>Send Money</Button>
       </div>
-      <ul className="flex flex-col mt-4 gap-y-2 overflow-scroll max-h-svh">
+      <ul className="mt-4 flex max-h-svh flex-col gap-y-2 overflow-scroll">
         {accounts && state === 'success'
           ? accounts.map((account) => <AccountItem account={account} key={account.id} />)
           : Array.from({ length: 5 }).map((_, index) => <AccountItemSkeleton key={index} />)}
