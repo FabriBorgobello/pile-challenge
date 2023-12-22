@@ -12,6 +12,7 @@ import { ErrorMessage } from './ErrorMessage';
 import { useAccount } from '../hooks/useAccounts';
 import { useModal } from '../hooks/useModal';
 import { useBalance } from '../hooks/useBalance';
+import toast from 'react-hot-toast';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
   source: '',
@@ -46,6 +47,7 @@ export default function SEPAForm() {
       closeModal();
       fetchAccounts();
       fetchBalance();
+      toast.success('Transfer successful', { duration: 5000 });
     } catch (error) {
       // Show error message
     }
