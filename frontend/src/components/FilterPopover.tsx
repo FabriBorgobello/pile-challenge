@@ -37,7 +37,6 @@ export function FilterPopover() {
       console.error(error);
     }
   }
-  console.log(methods.watch());
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>

@@ -11,7 +11,6 @@ import { transferInsertSchema } from '../schemas/transfer.schema';
 import { ErrorMessage } from './ErrorMessage';
 import { useAccount } from '../hooks/useAccounts';
 import { useModal } from '../hooks/useModal';
-import { useBalance } from '../hooks/useBalance';
 import toast from 'react-hot-toast';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
@@ -24,8 +23,7 @@ const TRANSFER_DEFAULT_VALUES: TransferInsert = {
 };
 
 export default function SEPAForm() {
-  const { data, fetchData: fetchAccounts } = useAccount();
-  const { fetchData: fetchBalance } = useBalance();
+  const { accounts } = useAccount();
 
   const { closeModal } = useModal();
   const { handleSubmit, register, formState } = useForm<TransferInsert>({
@@ -35,22 +33,17 @@ export default function SEPAForm() {
   });
 
   const onSubmit = async (data: TransferInsert) => {
-    try {
-      const res = await fetch('http://localhost:3000/transfer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        throw new Error('Something went wrong');
-      }
-      closeModal();
-      fetchAccounts();
-      fetchBalance();
-      toast.success('Transfer successful', { duration: 5000 });
-    } catch (error) {
-      // Show error message
+    const res = await fetch('http://localhost:3000/transfer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      throw new Error('Something went wrong');
     }
+    closeModal();
+    toast.success('Transfer successful', { duration: 5000 });
+    window.location.reload();
   };
 
   return (
@@ -63,7 +56,7 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
           <Select id="source" error={Boolean(formState.errors.source)} {...register('source')}>
-            {data?.accounts.map((account) => (
+            {accounts.map((account) => (
               <option key={account.id} value={account.id} className="flex justify-between">
                 {account.name} - (
                 {formatCurrency(account.balances.available.value, account.balances.available.currency)})

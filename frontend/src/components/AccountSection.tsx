@@ -2,7 +2,7 @@ import { useAccount } from '../hooks/useAccounts';
 import { AccountItem, AccountItemSkeleton } from './AccountItem';
 import { FilterPopover } from './FilterPopover';
 import { Pagination } from './Pagination';
-import { Subtitle } from './Typography';
+import { PrimaryText, Subtitle } from './Typography';
 
 export function AccountSection() {
   const { accounts, status } = useAccount();
@@ -14,12 +14,18 @@ export function AccountSection() {
         <FilterPopover />
       </div>
       {status !== 'success' && <SkeletonList />}
-      <ul className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4">
-        {accounts.map((account) => (
-          <AccountItem account={account} key={account.id} />
-        ))}
-      </ul>
-      <Pagination />
+      {status === 'success' && accounts.length === 0 && (
+        <PrimaryText className="py-6 text-center">No accounts found</PrimaryText>
+      )}
+      {status === 'success' && accounts.length > 0 && (
+        <ul className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4">
+          {accounts.map((account) => (
+            <AccountItem account={account} key={account.id} />
+          ))}
+        </ul>
+      )}
+
+      {accounts.length > 0 && <Pagination />}
     </div>
   );
 }
