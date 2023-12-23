@@ -47,7 +47,7 @@ export default function SEPAForm() {
   };
 
   return (
-    <div className="flex flex-col gap-y-8 p-4 sm:p-8">
+    <div className="flex flex-col gap-y-8 p-4 sm:p-8" data-testid="sepa-form">
       <div>
         <Subtitle>SEPA bank transfer</Subtitle>
         <SecondaryText>Send money to any bank account in the EU.</SecondaryText>
