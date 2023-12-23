@@ -1,3 +1,4 @@
+import { IBANRegex } from '@/account/account.schema';
 import { z } from 'zod';
 
 export const transferSchema = z.object({
@@ -6,7 +7,7 @@ export const transferSchema = z.object({
   source: z.string().min(1),
   amount: z.number().min(1),
   recipientName: z.string().min(1),
-  targetIBAN: z.string().min(22),
+  targetIBAN: z.string().regex(IBANRegex, 'Invalid IBAN'),
   targetBIC: z.string().min(8),
   reference: z.string().min(1),
 });
