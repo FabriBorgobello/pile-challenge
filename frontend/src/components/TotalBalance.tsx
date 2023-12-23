@@ -24,11 +24,14 @@ export function TotalBalance() {
         )}
       </h2>
       {!isLoading ? (
-        <p className="text-center text-[1.5rem] font-bold text-black sm:text-left  sm:text-4xl dark:text-white">
+        <p
+          data-testid="total-balance"
+          className="text-center text-[1.5rem] font-bold text-black sm:text-left  sm:text-4xl dark:text-white"
+        >
           {balance && formatCurrency(balance.balance, balance.currency)}
         </p>
       ) : (
-        <div className="h-10 w-1/2 rounded-md bg-gray-300"></div>
+        <div data-testid="total-balance-skeleton" className="h-10 w-1/2 rounded-md bg-gray-300"></div>
       )}
     </div>
   );

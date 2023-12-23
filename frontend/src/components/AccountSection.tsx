@@ -18,7 +18,10 @@ export function AccountSection() {
         <PrimaryText className="py-6 text-center">No accounts found</PrimaryText>
       )}
       {status === 'success' && accounts.length > 0 && (
-        <ul className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4">
+        <ul
+          data-testid="account-list"
+          className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+        >
           {accounts.map((account) => (
             <AccountItem account={account} key={account.id} />
           ))}
@@ -32,7 +35,10 @@ export function AccountSection() {
 
 function SkeletonList() {
   return (
-    <ul className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4">
+    <ul
+      data-testid="account-list-skeleton"
+      className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+    >
       {[...Array(6)].map((_, index) => (
         <AccountItemSkeleton key={index} />
       ))}

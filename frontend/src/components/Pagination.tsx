@@ -36,7 +36,7 @@ export function Pagination() {
           Next
         </Button>
       </div>
-      <p className="text-center text-black dark:text-white">
+      <p className="text-center text-black dark:text-white" data-testid="page-info">
         Page {currentPage} of {totalPages}
       </p>
     </>

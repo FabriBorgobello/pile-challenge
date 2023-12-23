@@ -47,6 +47,7 @@ export function FilterPopover() {
         <Popover.Content
           className="w-[260px] rounded border border-gray-100 bg-white p-6 data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade dark:border-gray-700 dark:bg-gray-800 "
           sideOffset={5}
+          data-testid="filter-popover"
         >
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -85,7 +86,7 @@ function BalanceFilter() {
         </div>
         <div className="flex justify-between">
           <SecondaryText>Max</SecondaryText>
-          <SecondaryText>{formatCurrency(watch('maxBalance'), 'EUR')}</SecondaryText>
+          <SecondaryText data-testid="max-balance">{formatCurrency(watch('maxBalance'), 'EUR')}</SecondaryText>
         </div>
       </div>
       <Slider.Root
@@ -100,7 +101,10 @@ function BalanceFilter() {
         minStepsBetweenThumbs={1}
       >
         <Slider.Track className="relative h-[3px] grow rounded-full bg-gray-200 dark:bg-gray-600">
-          <Slider.Range className="absolute h-full rounded-full bg-black dark:bg-indigo-200" />
+          <Slider.Range
+            data-testid="filter-account-balance-slider"
+            className="absolute h-full rounded-full bg-black dark:bg-indigo-200"
+          />
         </Slider.Track>
 
         <Slider.Thumb
