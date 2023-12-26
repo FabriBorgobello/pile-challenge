@@ -1,16 +1,17 @@
+import { lazy,Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
+
+import { AccountSection } from './components/AccountSection';
+import { Actions } from './components/Actions';
+import { Footer } from './components/Footer';
+import { Modal } from './components/Modal';
+import { NavBar } from './components/NavBar';
+import { SEPAFormSkeleton } from './components/SEPAFormSkeleton';
 import { TotalBalance } from './components/TotalBalance';
 import { Title } from './components/Typography';
 import { AccountsProvider } from './context/AccountContext';
-import { ModalProvider } from './context/ModalContext';
 import { BalanceProvider } from './context/BalanceContext';
-import { Toaster } from 'react-hot-toast';
-import { Actions } from './components/Actions';
-import { Footer } from './components/Footer';
-import { NavBar } from './components/NavBar';
-import { AccountSection } from './components/AccountSection';
-import { Modal } from './components/Modal';
-import { Suspense, lazy } from 'react';
-import { SEPAFormSkeleton } from './components/SEPAFormSkeleton';
+import { ModalProvider } from './context/ModalContext';
 
 const SEPAForm = lazy(() => import('./components/SEPAForm'));
 

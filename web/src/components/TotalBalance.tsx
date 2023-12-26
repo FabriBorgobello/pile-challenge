@@ -1,6 +1,7 @@
+import { clsx } from 'clsx';
+
 import { useBalance } from '../hooks/useBalance';
 import { formatCurrency } from '../utils';
-import { clsx } from 'clsx';
 
 export function TotalBalance() {
   const { data: balance, state } = useBalance();
@@ -25,13 +26,13 @@ export function TotalBalance() {
       </h2>
       {!isLoading ? (
         <p
-          data-testid="total-balance"
           className="text-center text-[1.5rem] font-bold text-black sm:text-left  sm:text-4xl dark:text-white"
+          data-testid="total-balance"
         >
           {balance && formatCurrency(balance.balance, balance.currency)}
         </p>
       ) : (
-        <div data-testid="total-balance-skeleton" className="h-10 w-1/2 rounded-md bg-gray-300"></div>
+        <div className="h-10 w-1/2 rounded-md bg-gray-300" data-testid="total-balance-skeleton"></div>
       )}
     </div>
   );

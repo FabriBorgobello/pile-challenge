@@ -3,11 +3,11 @@ import { Account } from '../types';
 export function AccountItem({ account }: { account: Account }) {
   return (
     <li
-      data-testid="account-item"
       className="flex flex-col gap-y-2 rounded-md border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-800"
+      data-testid="account-item"
     >
       <div className="flex items-center justify-between">
-        <p data-testid="account-item-name" className="text-lg font-bold text-black dark:text-white">
+        <p className="text-lg font-bold text-black dark:text-white" data-testid="account-item-name">
           {account.name}
         </p>
         <p className="flex gap-x-1 rounded-full bg-indigo-700 px-2 py-1 text-xs text-white">
@@ -29,8 +29,8 @@ export function AccountItem({ account }: { account: Account }) {
 export function AccountItemSkeleton() {
   return (
     <li
-      data-testid="account-item-skeleton"
       className="flex flex-col gap-y-2 rounded-md border border-gray-200 bg-white  px-4 py-6 dark:border-gray-800 dark:bg-gray-800"
+      data-testid="account-item-skeleton"
     >
       <div className="mb-2 h-4 w-1/4 rounded bg-gray-300"></div>
       <div className="h-4 w-1/3 rounded bg-gray-300"></div>

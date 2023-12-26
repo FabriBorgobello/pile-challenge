@@ -1,5 +1,6 @@
-import React, { MouseEvent, useRef } from 'react';
 import { clsx } from 'clsx';
+import React, { MouseEvent, useRef } from 'react';
+
 import { useModal } from '../hooks/useModal';
 
 export function Modal({ children }: { children: React.ReactNode }) {
@@ -23,13 +24,13 @@ export function Modal({ children }: { children: React.ReactNode }) {
     >
       {isModalOpen && (
         <div
-          className="relative w-96 rounded-lg border border-gray-700 bg-white shadow-2xl dark:bg-gray-900"
           ref={modalContentRef}
+          className="relative w-96 rounded-lg border border-gray-700 bg-white shadow-2xl dark:bg-gray-900"
         >
           {children}
           <button
-            onClick={closeModal}
             className="absolute right-2 top-1 rounded-full p-2 text-black transition-all hover:bg-gray-200 dark:text-white dark:hover:bg-gray-800"
+            onClick={closeModal}
           >
             X
           </button>

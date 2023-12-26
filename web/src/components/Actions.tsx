@@ -6,7 +6,7 @@ export function Actions() {
 
   return (
     <div className="flex w-full justify-end gap-x-4">
-      <Button onClick={openModal} className="w-full sm:w-auto">
+      <Button className="w-full sm:w-auto" onClick={openModal}>
         Send money
       </Button>
     </div>

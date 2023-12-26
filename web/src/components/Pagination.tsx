@@ -16,22 +16,22 @@ export function Pagination() {
     <>
       <div className="flex items-center justify-between text-black dark:text-white">
         <Button
+          disabled={isPrevDisabled}
           variant="text"
           onClick={() => {
             setOffset((prev) => Math.max(prev - limit, 0));
             scrollToAccountSection();
           }}
-          disabled={isPrevDisabled}
         >
           Previous
         </Button>
         <Button
+          disabled={isNextDisabled}
           variant="text"
           onClick={() => {
             setOffset((prev) => Math.min(prev + limit, (totalPages - 1) * limit));
             scrollToAccountSection();
           }}
-          disabled={isNextDisabled}
         >
           Next
         </Button>

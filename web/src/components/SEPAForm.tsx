@@ -1,17 +1,18 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+import { useAllAccounts } from '../hooks/useAllAccounts';
+import { useModal } from '../hooks/useModal';
+import { transferInsertSchema } from '../schemas/transfer.schema';
+import { TransferInsert } from '../types';
 import { formatCurrency } from '../utils';
 import { Button } from './Button';
+import { ErrorMessage } from './ErrorMessage';
 import { Input } from './Input';
 import { Label } from './Label';
 import { Select } from './Select';
 import { SecondaryText, Subtitle } from './Typography';
-import { TransferInsert } from '../types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { transferInsertSchema } from '../schemas/transfer.schema';
-import { ErrorMessage } from './ErrorMessage';
-import { useModal } from '../hooks/useModal';
-import toast from 'react-hot-toast';
-import { useAllAccounts } from '../hooks/useAllAccounts';
 
 const TRANSFER_DEFAULT_VALUES: TransferInsert = {
   source: '',
@@ -55,9 +56,9 @@ export default function SEPAForm() {
       <form className="flex flex-col gap-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
-          <Select id="source" error={Boolean(formState.errors.source)} {...register('source')}>
+          <Select error={Boolean(formState.errors.source)} id="source" {...register('source')}>
             {accounts.map((account) => (
-              <option key={account.id} value={account.id} className="flex justify-between">
+              <option key={account.id} className="flex justify-between" value={account.id}>
                 {account.name} - (
                 {formatCurrency(account.balances.available.value, account.balances.available.currency)})
               </option>
@@ -69,10 +70,10 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="amount">Amount (€)</Label>
           <Input
-            type="number"
+            error={Boolean(formState.errors.amount)}
             id="amount"
             min={1}
-            error={Boolean(formState.errors.amount)}
+            type="number"
             {...register('amount', { valueAsNumber: true })}
           />
           {formState.errors.amount && <ErrorMessage>{formState.errors.amount.message}</ErrorMessage>}
@@ -80,30 +81,30 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="recipientName">Recipient name</Label>
           <Input
-            type="text"
-            id="recipientName"
             error={Boolean(formState.errors.recipientName)}
+            id="recipientName"
+            type="text"
             {...register('recipientName')}
           />
           {formState.errors.recipientName && <ErrorMessage>{formState.errors.recipientName.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="targetIBAN">IBAN</Label>
-          <Input type="text" id="targetIBAN" error={Boolean(formState.errors.targetIBAN)} {...register('targetIBAN')} />
+          <Input error={Boolean(formState.errors.targetIBAN)} id="targetIBAN" type="text" {...register('targetIBAN')} />
           {formState.errors.targetIBAN && <ErrorMessage>{formState.errors.targetIBAN.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="targetBIC">BIC</Label>
-          <Input type="text" id="targetBIC" error={Boolean(formState.errors.targetBIC)} {...register('targetBIC')} />
+          <Input error={Boolean(formState.errors.targetBIC)} id="targetBIC" type="text" {...register('targetBIC')} />
           {formState.errors.targetBIC && <ErrorMessage>{formState.errors.targetBIC.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="reference">Reference</Label>
-          <Input type="text" id="reference" error={Boolean(formState.errors.reference)} {...register('reference')} />
+          <Input error={Boolean(formState.errors.reference)} id="reference" type="text" {...register('reference')} />
           {formState.errors.reference && <ErrorMessage>{formState.errors.reference.message}</ErrorMessage>}
         </div>
 
-        <Button type="submit" className="last:mt-8" disabled={!formState.isDirty || formState.isSubmitting}>
+        <Button className="last:mt-8" disabled={!formState.isDirty || formState.isSubmitting} type="submit">
           {formState.isSubmitting ? 'Sending...' : 'Send'}
         </Button>
       </form>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { Account } from '../types';
 
 export function useAllAccounts() {

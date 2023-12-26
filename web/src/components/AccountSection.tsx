@@ -19,11 +19,11 @@ export function AccountSection() {
       )}
       {status === 'success' && accounts.length > 0 && (
         <ul
-          data-testid="account-list"
           className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+          data-testid="account-list"
         >
           {accounts.map((account) => (
-            <AccountItem account={account} key={account.id} />
+            <AccountItem key={account.id} account={account} />
           ))}
         </ul>
       )}
@@ -36,8 +36,8 @@ export function AccountSection() {
 function SkeletonList() {
   return (
     <ul
-      data-testid="account-list-skeleton"
       className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+      data-testid="account-list-skeleton"
     >
       {[...Array(6)].map((_, index) => (
         <AccountItemSkeleton key={index} />

@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { transferInsertSchema, transferSchema } from './schemas/transfer.schema';
+
 import { accountSchema, balanceSchema } from './schemas/account.schema.';
+import { transferInsertSchema, transferSchema } from './schemas/transfer.schema';
 
 /** TRANSFER */
 export type Transfer = z.infer<typeof transferSchema>;

@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
 import { clsx } from 'clsx';
+import React, { forwardRef } from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'text';
