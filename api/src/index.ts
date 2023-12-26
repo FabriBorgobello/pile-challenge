@@ -1,7 +1,8 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import { logger } from 'hono/logger';
 import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
+
 import { accountRouter } from '@/account/account.route';
 import { transferRouter } from '@/transfer/transfer.route';
 import { ApiError } from '@/utils/ApiError';

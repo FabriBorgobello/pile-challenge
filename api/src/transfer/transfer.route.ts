@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
-import { TransferCreate } from './transfer.schema';
+
 import { createTransfer } from './transfer.controller';
+import { TransferCreate } from './transfer.schema';
 
 export const transferRouter = new Hono();
 

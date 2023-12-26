@@ -1,5 +1,6 @@
-import { IBANRegex } from '@/account/account.schema';
 import { z } from 'zod';
+
+import { IBANRegex } from '@/account/account.schema';
 
 export const transferSchema = z.object({
   id: z.string().uuid(),
