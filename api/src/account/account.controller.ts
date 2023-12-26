@@ -1,5 +1,5 @@
 import { InvalidZodError, NotFoundError } from '@/utils/ApiError';
-import { Account, AccountFilter, accountFilterSchema, balanceSchema } from './account.schema';
+import { Account, AccountFilter, balanceSchema } from './account.schema';
 import { data } from './accounts.json';
 
 const accounts: Account[] = data;
