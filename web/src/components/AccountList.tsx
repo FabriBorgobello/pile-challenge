@@ -13,7 +13,10 @@ export function AccountList({ accounts, count, decrementOffset, incrementOffset,
   return (
     <>
       {count === 0 ? (
-        <p className="text-center text-black dark:text-white" data-testid="account-empty-state">
+        <p
+          className="flex min-h-24 items-center justify-center text-center text-black dark:text-white"
+          data-testid="account-empty-state"
+        >
           No accounts found.
         </p>
       ) : (
@@ -22,7 +25,7 @@ export function AccountList({ accounts, count, decrementOffset, incrementOffset,
             Showing {offset + 1} - {offset + limit} of {count} accounts
           </p>
           <ul
-            className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4 pr-4"
+            className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-auto rounded-md pb-4 pr-4"
             data-testid="account-list"
           >
             {accounts.map((account: Account) => (
@@ -48,7 +51,7 @@ export function AccountList({ accounts, count, decrementOffset, incrementOffset,
 export function AccountListSkeleton() {
   return (
     <ul
-      className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+      className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-auto rounded-md pb-4"
       data-testid="account-list-skeleton"
     >
       {Array.from({ length: 10 }).map((_, index) => (

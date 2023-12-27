@@ -37,7 +37,7 @@ To get started, follow these steps:
 
 ## Testing:
 
-There are two options for running end-to-end tests:
+There are two options for running end-to-end tests. Both options require the frontend and backend servers to be running.
 
 - For headless testing, run:
   `npm run test`
