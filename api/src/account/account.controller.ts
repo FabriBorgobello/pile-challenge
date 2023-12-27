@@ -49,3 +49,11 @@ export async function getBalance() {
   }, 0);
   return { balance: total, currency: 'EUR', count: accounts.length };
 }
+
+export async function getAccount(id: Account['id']) {
+  const account = accounts.find((a) => a.id === id);
+  if (!account) {
+    throw new NotFoundError(`Account ${id} not found`);
+  }
+  return account;
+}

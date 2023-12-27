@@ -60,8 +60,17 @@ export default function SEPAForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('An error occurred. Please reload the page and try again.');
-      return res.json();
+      const json = await res.json();
+      if (!res.ok) {
+        switch (res.status) {
+          case 400:
+            throw new Error(`Invalid data: ${json.error ?? res.statusText}`);
+          default:
+            throw new Error(`Something went wrong: ${res.statusText}`);
+        }
+      }
+
+      return json;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['balance'] });

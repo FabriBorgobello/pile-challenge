@@ -1,8 +1,20 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
+
+// Utility function to complete the SEPA form and submit it
+async function completeSEPAForm(page: Page, data: Record<string, any>) {
+  await page.getByRole('button', { name: 'Send money' }).click();
+  await page.getByLabel('From').selectOption(data.from);
+  await page.getByLabel('Amount (€)').fill(data.amount.toString());
+  await page.getByLabel('Recipient name').fill(data.recipientName);
+  await page.getByLabel('IBAN').fill(data.IBAN);
+  await page.getByLabel('BIC').fill(data.BIC);
+  await page.getByLabel('Reference').fill(data.reference);
+  await page.getByTestId('sepa-form').getByRole('button', { name: 'Send' }).click();
+}
 
 test.describe('SEPA transfers', () => {
   test('avoids sending invalid data', async ({ page }) => {
@@ -32,26 +44,40 @@ test.describe('SEPA transfers', () => {
     await page.getByTestId('sepa-form').getByRole('button', { name: 'Send' }).click();
     await expect(SEPAForm).toBeVisible();
   });
+
   test('sends valid data', async ({ page }) => {
-    const validData = {
+    await completeSEPAForm(page, {
       from: '5f1b6eb7-885f-4f85-af57-a4694ab62eec',
       amount: 10000,
       recipientName: 'Jane Doe',
       IBAN: 'DE14500105177887447467',
       BIC: '12345678',
       reference: 'Food',
-    };
-
-    await page.getByRole('button', { name: 'Send money' }).click();
-    await page.getByLabel('From').selectOption(validData.from);
-    await page.getByLabel('Amount (€)').fill(validData.amount.toString());
-    await page.getByLabel('Recipient name').fill(validData.recipientName);
-    await page.getByLabel('IBAN').fill(validData.IBAN);
-    await page.getByLabel('BIC').fill(validData.BIC);
-    await page.getByLabel('Reference').fill(validData.reference);
-    await page.getByTestId('sepa-form').getByRole('button', { name: 'Send' }).click();
+    });
 
     await expect(page.getByTestId('sepa-form')).not.toBeVisible();
     await expect(page.getByText('Transfer successful')).toBeVisible();
+  });
+
+  test('displays an error message in case of failure', async ({ page }) => {
+    // Mock the API response to return an error
+    await page.route('http://localhost:3000/transfer**', async (route) => {
+      await route.fulfill({
+        json: { error: 'Insufficient funds' },
+        status: 400,
+      });
+    });
+    await page.reload();
+
+    await completeSEPAForm(page, {
+      from: '5f1b6eb7-885f-4f85-af57-a4694ab62eec',
+      amount: 10000,
+      recipientName: 'Jane Doe',
+      IBAN: 'DE14500105177887447467',
+      BIC: '12345678',
+      reference: 'Food',
+    });
+
+    await expect(page.getByText('Invalid data: Insufficient funds')).toBeVisible();
   });
 });
