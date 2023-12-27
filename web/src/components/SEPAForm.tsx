@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FieldError, useForm, UseFormRegisterReturn } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -37,8 +38,25 @@ const defaultValues: TransferInsert = {
 const resolver = zodResolver(transferInsertSchema);
 
 export default function SEPAForm() {
+  const queryClient = useQueryClient();
   const accounts = useTransferAccounts();
   const { closeModal } = useModal();
+  const mutation = useMutation({
+    mutationFn: (data: TransferInsert) =>
+      fetch('http://localhost:3000/transfer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['balance'] });
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+
+      closeModal();
+      toast.success('Transfer successful', { duration: 5000 });
+    },
+  });
+
   const { handleSubmit, register, formState } = useForm<TransferInsert>({ defaultValues, resolver, mode: 'onBlur' });
   const errors = formState.errors;
 
@@ -50,22 +68,7 @@ export default function SEPAForm() {
       return;
     }
 
-    try {
-      const res = await fetch('http://localhost:3000/transfer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        console.log(res);
-        throw new Error('Something went wrong');
-      }
-      closeModal();
-      toast.success('Transfer successful', { duration: 5000 });
-      // TODO: Update accounts
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Something went wrong. Please try again later.');
-    }
+    mutation.mutate(data);
   };
   return (
     <div className="flex flex-col gap-y-8 p-4 sm:p-8" data-testid="sepa-form">

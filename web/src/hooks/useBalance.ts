@@ -1,11 +1,14 @@
-import { useContext } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { BalanceContext } from '@/context/BalanceContext';
+import { Balance } from '@/types';
 
-export const useBalance = () => {
-  const context = useContext(BalanceContext);
-  if (context === undefined) {
-    throw new Error('useBalance must be used within a BalanceProvider');
-  }
-  return context;
-};
+async function getBalance(): Promise<Balance> {
+  const res = await fetch('http://localhost:3000/account/balance');
+  return res.json();
+}
+export function useBalance() {
+  return useSuspenseQuery({
+    queryKey: ['balance'],
+    queryFn: getBalance,
+  });
+}
