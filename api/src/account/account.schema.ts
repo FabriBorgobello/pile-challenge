@@ -18,7 +18,7 @@ export const accountSchema = z.object({
 
 export const accountFilterSchema = z.object({
   minBalance: z.coerce.number().default(0),
-  maxBalance: z.coerce.number().default(Infinity),
+  maxBalance: z.coerce.number().default(Number.MAX_SAFE_INTEGER),
   limit: z.coerce.number().default(10),
   offset: z.coerce.number().default(0),
 });

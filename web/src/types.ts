@@ -18,11 +18,8 @@ export type Balance = {
   count: number;
 };
 
-/** CONTEXT */
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
-export type DataContextType<T, R> = {
-  data: T | null;
-  state: LoadingState;
-  error: Error | null;
-  fetchData: (query?: R) => Promise<void>;
-};
+/** FILTER */
+export interface FilterValues {
+  minBalance: number;
+  maxBalance: number;
+}
