@@ -1,40 +1,27 @@
-import { useAccount } from '@/hooks/useAccounts';
-
 import { Button } from './Button';
 
-export function Pagination() {
-  const { setOffset, count, limit, offset, currentPage } = useAccount();
+interface PaginationProps {
+  count: number;
+  decrementOffset: () => void;
+  incrementOffset: () => void;
+  limit: number;
+  offset: number;
+}
 
+export function Pagination({ count, decrementOffset, incrementOffset, limit, offset }: PaginationProps) {
+  const currentPage = Math.ceil(offset / limit) + 1;
   const totalPages = Math.ceil(count / limit);
+
   const isPrevDisabled = offset <= 0;
   const isNextDisabled = offset + limit >= count;
-
-  // Scroll to the top of the account section when the page changes
-  function scrollToAccountSection() {
-    document.getElementById('account-section')?.scrollIntoView({ behavior: 'smooth' });
-  }
 
   return (
     <>
       <div className="flex items-center justify-between text-black dark:text-white">
-        <Button
-          disabled={isPrevDisabled}
-          variant="text"
-          onClick={() => {
-            setOffset((prev) => Math.max(prev - limit, 0));
-            scrollToAccountSection();
-          }}
-        >
+        <Button disabled={isPrevDisabled} variant="text" onClick={decrementOffset}>
           Previous
         </Button>
-        <Button
-          disabled={isNextDisabled}
-          variant="text"
-          onClick={() => {
-            setOffset((prev) => Math.min(prev + limit, (totalPages - 1) * limit));
-            scrollToAccountSection();
-          }}
-        >
+        <Button disabled={isNextDisabled} variant="text" onClick={incrementOffset}>
           Next
         </Button>
       </div>

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { useAccount } from '@/hooks/useAccounts';
+import { useAccounts } from '@/hooks/useAccounts';
 import { accountQuerySchema } from '@/schemas/accountFilters.schema';
 import { formatCurrency } from '@/utils';
 
@@ -19,7 +19,7 @@ interface FilterValues {
 }
 
 export function FilterPopover() {
-  const { highestBalance, applyFilters } = useAccount();
+  const { highestBalance, applyFilters } = useAccounts();
   const [open, setOpen] = useState(false);
   const methods = useForm<FilterValues>({
     values: {
@@ -73,7 +73,7 @@ export function FilterPopover() {
 }
 
 function BalanceFilter() {
-  const { highestBalance } = useAccount();
+  const { highestBalance } = useAccounts();
   const { watch, formState, setValue } = useFormContext();
   const min = 0;
   const max = highestBalance;

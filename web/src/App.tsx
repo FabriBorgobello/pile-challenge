@@ -4,20 +4,22 @@ import { lazy, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Toaster } from 'react-hot-toast';
 
-import { AccountSection } from '@/components/AccountSection';
 import { Actions } from '@/components/Actions';
 import { Footer } from '@/components/Footer';
 import { Modal } from '@/components/Modal';
 import { NavBar } from '@/components/NavBar';
 import { SEPAFormSkeleton } from '@/components/SEPAFormSkeleton';
+import { TotalBalanceSkeleton } from '@/components/TotalBalance';
 import { Title } from '@/components/Typography';
-import { AccountsProvider } from '@/context/AccountContext';
 import { ModalProvider } from '@/context/ModalContext';
+
+import { AccountSection } from './components/AccountSection';
+import { ErrorFallback } from './components/ErrorComponent';
+
+const queryClient = new QueryClient();
 
 const SEPAForm = lazy(() => import('@/components/SEPAForm'));
 const TotalBalance = lazy(() => import('@/components/TotalBalance'));
-
-const queryClient = new QueryClient();
 
 function App() {
   return (
@@ -27,8 +29,8 @@ function App() {
           <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
             <NavBar />
             <Title>Welcome back, John!</Title>
-            <ErrorBoundary fallback={<p>Something went wrong</p>}>
-              <Suspense fallback={<p>Loading...</p>}>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<TotalBalanceSkeleton />}>
                 <TotalBalance />
               </Suspense>
             </ErrorBoundary>
@@ -51,11 +53,7 @@ function App() {
 }
 
 function Wrappers({ children }: { children: React.ReactNode }) {
-  return (
-    <ModalProvider>
-      <AccountsProvider>{children}</AccountsProvider>
-    </ModalProvider>
-  );
+  return <ModalProvider>{children}</ModalProvider>;
 }
 
 export default App;
