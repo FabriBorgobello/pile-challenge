@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
-import { Account } from '../types';
+import { Account } from '@/types';
 
 interface AccountsResponse {
   accounts: Account[];

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { AccountContext } from '../context/AccountContext';
+import { AccountContext } from '@/context/AccountContext';
 
 export const useAccount = () => {
   const context = useContext(AccountContext);

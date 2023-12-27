@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-import { Balance, DataContextType, LoadingState } from '../types';
+import { Balance, DataContextType, LoadingState } from '@/types';
 
 export const BalanceContext = createContext<DataContextType<Balance, unknown>>({
   data: null,

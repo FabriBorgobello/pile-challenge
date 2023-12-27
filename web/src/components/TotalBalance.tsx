@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 
-import { useBalance } from '../hooks/useBalance';
-import { formatCurrency } from '../utils';
+import { useBalance } from '@/hooks/useBalance';
+import { formatCurrency } from '@/utils';
 
 export function TotalBalance() {
   const { data: balance, state } = useBalance();

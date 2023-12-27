@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Account } from '../types';
+import { Account } from '@/types';
 
 export function useTransferAccounts() {
   const [accounts, setAccounts] = useState<Account[]>([]);

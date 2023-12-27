@@ -1,4 +1,5 @@
-import { useModal } from '../hooks/useModal';
+import { useModal } from '@/hooks/useModal';
+
 import { Button } from './Button';
 
 export function Actions() {

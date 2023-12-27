@@ -1,5 +1,6 @@
-import { useAccount } from '../hooks/useAccounts';
-import { Account } from '../types';
+import { useAccount } from '@/hooks/useAccounts';
+import { Account } from '@/types';
+
 import { AccountItem, AccountItemSkeleton } from './AccountItem';
 import { FilterPopover } from './FilterPopover';
 import { Pagination } from './Pagination';

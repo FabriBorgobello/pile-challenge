@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { useAccount } from '../hooks/useAccounts';
-import { accountQuerySchema } from '../schemas/accountFilters.schema';
-import { formatCurrency } from '../utils';
+import { useAccount } from '@/hooks/useAccounts';
+import { accountQuerySchema } from '@/schemas/accountFilters.schema';
+import { formatCurrency } from '@/utils';
+
 import { Button } from './Button';
 import { ErrorMessage } from './ErrorMessage';
 import { PrimaryText, SecondaryText } from './Typography';

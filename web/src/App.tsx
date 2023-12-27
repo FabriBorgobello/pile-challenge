@@ -1,19 +1,19 @@
 import { lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { AccountSection } from './components/AccountSection';
-import { Actions } from './components/Actions';
-import { Footer } from './components/Footer';
-import { Modal } from './components/Modal';
-import { NavBar } from './components/NavBar';
-import { SEPAFormSkeleton } from './components/SEPAFormSkeleton';
-import { TotalBalance } from './components/TotalBalance';
-import { Title } from './components/Typography';
-import { AccountsProvider } from './context/AccountContext';
-import { BalanceProvider } from './context/BalanceContext';
-import { ModalProvider } from './context/ModalContext';
+import { AccountSection } from '@/components/AccountSection';
+import { Actions } from '@/components/Actions';
+import { Footer } from '@/components/Footer';
+import { Modal } from '@/components/Modal';
+import { NavBar } from '@/components/NavBar';
+import { SEPAFormSkeleton } from '@/components/SEPAFormSkeleton';
+import { TotalBalance } from '@/components/TotalBalance';
+import { Title } from '@/components/Typography';
+import { AccountsProvider } from '@/context/AccountContext';
+import { BalanceProvider } from '@/context/BalanceContext';
+import { ModalProvider } from '@/context/ModalContext';
 
-const SEPAForm = lazy(() => import('./components/SEPAForm'));
+const SEPAForm = lazy(() => import('@/components/SEPAForm'));
 
 function App() {
   return (

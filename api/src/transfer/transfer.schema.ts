@@ -7,7 +7,7 @@ export const transferSchema = z.object({
   createdAt: z.string(),
   source: z.string().min(1),
   amount: z.number().min(1),
-  recipientName: z.string().min(1),
+  recipient: z.string().min(1),
   targetIBAN: z.string().regex(IBANRegex, 'Invalid IBAN'),
   targetBIC: z.string().min(8),
   reference: z.string().min(1),

@@ -1,4 +1,4 @@
-import { Account } from '../types';
+import { Account } from '@/types';
 
 export function AccountItem({ account }: { account: Account }) {
   return (

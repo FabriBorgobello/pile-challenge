@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import React, { MouseEvent, useRef } from 'react';
 
-import { useModal } from '../hooks/useModal';
+import { useModal } from '@/hooks/useModal';
 
 export function Modal({ children }: { children: React.ReactNode }) {
   const { isModalOpen, closeModal } = useModal();

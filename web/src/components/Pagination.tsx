@@ -1,4 +1,5 @@
-import { useAccount } from '../hooks/useAccounts';
+import { useAccount } from '@/hooks/useAccounts';
+
 import { Button } from './Button';
 
 export function Pagination() {

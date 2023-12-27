@@ -2,11 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldError, useForm, UseFormRegister } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { useModal } from '../hooks/useModal';
-import { useTransferAccounts } from '../hooks/useTransferAccounts';
-import { transferInsertSchema } from '../schemas/transfer.schema';
-import { TransferInsert } from '../types';
-import { formatCurrency } from '../utils';
+import { useModal } from '@/hooks/useModal';
+import { useTransferAccounts } from '@/hooks/useTransferAccounts';
+import { transferInsertSchema } from '@/schemas/transfer.schema';
+import { TransferInsert } from '@/types';
+import { formatCurrency } from '@/utils';
+
 import { Button } from './Button';
 import { ErrorMessage } from './ErrorMessage';
 import { Input } from './Input';
