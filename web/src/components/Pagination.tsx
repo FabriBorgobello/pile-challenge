@@ -8,6 +8,7 @@ export function Pagination() {
   const isPrevDisabled = offset <= 0;
   const isNextDisabled = offset + limit >= count;
 
+  // Scroll to the top of the account section when the page changes
   function scrollToAccountSection() {
     document.getElementById('account-section')?.scrollIntoView({ behavior: 'smooth' });
   }

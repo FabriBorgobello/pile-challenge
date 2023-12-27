@@ -1,4 +1,5 @@
 import { useAccount } from '../hooks/useAccounts';
+import { Account } from '../types';
 import { AccountItem, AccountItemSkeleton } from './AccountItem';
 import { FilterPopover } from './FilterPopover';
 import { Pagination } from './Pagination';
@@ -13,27 +14,15 @@ export function AccountSection() {
         <Subtitle id="account-section">Accounts</Subtitle>
         <FilterPopover />
       </div>
-      {status !== 'success' && <SkeletonList />}
-      {status === 'success' && accounts.length === 0 && (
-        <PrimaryText className="py-6 text-center">No accounts found</PrimaryText>
-      )}
-      {status === 'success' && accounts.length > 0 && (
-        <ul
-          className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
-          data-testid="account-list"
-        >
-          {accounts.map((account) => (
-            <AccountItem key={account.id} account={account} />
-          ))}
-        </ul>
-      )}
-
+      {status !== 'success' && <AccountListSkeleton />}
+      {status === 'success' && accounts.length === 0 && <AccountListEmptyState />}
+      {status === 'success' && accounts.length > 0 && <AccountList accounts={accounts} />}
       {accounts.length > 0 && <Pagination />}
     </div>
   );
 }
 
-function SkeletonList() {
+function AccountListSkeleton() {
   return (
     <ul
       className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
@@ -41,6 +30,23 @@ function SkeletonList() {
     >
       {[...Array(6)].map((_, index) => (
         <AccountItemSkeleton key={index} />
+      ))}
+    </ul>
+  );
+}
+
+function AccountListEmptyState() {
+  return <PrimaryText className="py-6 text-center">No accounts found</PrimaryText>;
+}
+
+function AccountList({ accounts }: { accounts: Account[] }) {
+  return (
+    <ul
+      className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+      data-testid="account-list"
+    >
+      {accounts.map((account) => (
+        <AccountItem key={account.id} account={account} />
       ))}
     </ul>
   );

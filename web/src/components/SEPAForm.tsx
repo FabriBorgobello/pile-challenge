@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { FieldError, useForm, UseFormRegister } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { useAllAccounts } from '../hooks/useAllAccounts';
 import { useModal } from '../hooks/useModal';
+import { useTransferAccounts } from '../hooks/useTransferAccounts';
 import { transferInsertSchema } from '../schemas/transfer.schema';
 import { TransferInsert } from '../types';
 import { formatCurrency } from '../utils';
@@ -14,37 +14,49 @@ import { Label } from './Label';
 import { Select } from './Select';
 import { SecondaryText, Subtitle } from './Typography';
 
-const TRANSFER_DEFAULT_VALUES: TransferInsert = {
+/**
+ * Default values for the form
+ * @note This is not necessary but it's a good practice to have default values for the form
+ * @see https://www.react-hook-form.com/api/useform/#defaultValues
+ */
+const defaultValues: TransferInsert = {
   source: '',
   amount: 1,
-  recipientName: '',
+  recipient: '',
   targetIBAN: '',
   targetBIC: '',
   reference: '',
 };
 
-export default function SEPAForm() {
-  const accounts = useAllAccounts();
+/**
+ * Form resolver
+ * It's used to validate the form using external schemas (Zod in this case)
+ * @see https://react-hook-form.com/docs/useform#resolver
+ */
+const resolver = zodResolver(transferInsertSchema);
 
+export default function SEPAForm() {
+  const accounts = useTransferAccounts();
   const { closeModal } = useModal();
-  const { handleSubmit, register, formState } = useForm<TransferInsert>({
-    defaultValues: TRANSFER_DEFAULT_VALUES,
-    resolver: zodResolver(transferInsertSchema),
-    mode: 'onBlur',
-  });
+  const { handleSubmit, register, formState } = useForm<TransferInsert>({ defaultValues, resolver, mode: 'onBlur' });
+  const errors = formState.errors;
 
   const onSubmit = async (data: TransferInsert) => {
-    const res = await fetch('http://localhost:3000/transfer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      throw new Error('Something went wrong');
+    try {
+      const res = await fetch('http://localhost:3000/transfer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        throw new Error('Something went wrong');
+      }
+      closeModal();
+      toast.success('Transfer successful', { duration: 5000 });
+      window.location.reload();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Something went wrong. Please try again later.');
     }
-    closeModal();
-    toast.success('Transfer successful', { duration: 5000 });
-    window.location.reload();
   };
 
   return (
@@ -56,7 +68,7 @@ export default function SEPAForm() {
       <form className="flex flex-col gap-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
-          <Select error={Boolean(formState.errors.source)} id="source" {...register('source')}>
+          <Select error={Boolean(errors.source)} id="source" {...register('source')}>
             {accounts.map((account) => (
               <option key={account.id} className="flex justify-between" value={account.id}>
                 {account.name} - (
@@ -64,50 +76,34 @@ export default function SEPAForm() {
               </option>
             ))}
           </Select>
-          {formState.errors.source && <ErrorMessage>{formState.errors.source.message}</ErrorMessage>}
+          {errors.source && <ErrorMessage>{errors.source.message}</ErrorMessage>}
         </div>
-
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="amount">Amount (€)</Label>
-          <Input
-            error={Boolean(formState.errors.amount)}
-            id="amount"
-            min={1}
-            type="number"
-            {...register('amount', { valueAsNumber: true })}
-          />
-          {formState.errors.amount && <ErrorMessage>{formState.errors.amount.message}</ErrorMessage>}
-        </div>
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="recipientName">Recipient name</Label>
-          <Input
-            error={Boolean(formState.errors.recipientName)}
-            id="recipientName"
-            type="text"
-            {...register('recipientName')}
-          />
-          {formState.errors.recipientName && <ErrorMessage>{formState.errors.recipientName.message}</ErrorMessage>}
-        </div>
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="targetIBAN">IBAN</Label>
-          <Input error={Boolean(formState.errors.targetIBAN)} id="targetIBAN" type="text" {...register('targetIBAN')} />
-          {formState.errors.targetIBAN && <ErrorMessage>{formState.errors.targetIBAN.message}</ErrorMessage>}
-        </div>
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="targetBIC">BIC</Label>
-          <Input error={Boolean(formState.errors.targetBIC)} id="targetBIC" type="text" {...register('targetBIC')} />
-          {formState.errors.targetBIC && <ErrorMessage>{formState.errors.targetBIC.message}</ErrorMessage>}
-        </div>
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="reference">Reference</Label>
-          <Input error={Boolean(formState.errors.reference)} id="reference" type="text" {...register('reference')} />
-          {formState.errors.reference && <ErrorMessage>{formState.errors.reference.message}</ErrorMessage>}
-        </div>
+        <FormInput error={errors.amount} id="amount" label="Amount (€)" min={1} register={register} type="number" />
+        <FormInput error={errors.recipient} id="recipient" label="Recipient name" register={register} />
+        <FormInput error={errors.targetIBAN} id="targetIBAN" label="IBAN" register={register} />
+        <FormInput error={errors.targetBIC} id="targetBIC" label="BIC" register={register} />
+        <FormInput error={errors.reference} id="reference" label="Reference" register={register} />
 
         <Button className="last:mt-8" disabled={!formState.isDirty || formState.isSubmitting} type="submit">
           {formState.isSubmitting ? 'Sending...' : 'Send'}
         </Button>
       </form>
+    </div>
+  );
+}
+
+interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  register: UseFormRegister<TransferInsert>;
+  error: FieldError | undefined;
+}
+
+function FormInput({ label, register, error, ...rest }: FormInputProps) {
+  return (
+    <div className="flex flex-col gap-y-1">
+      <Label htmlFor={rest.id}>{label}</Label>
+      <Input error={Boolean(error)} {...rest} {...register(rest.id as keyof TransferInsert)} />
+      {error && <ErrorMessage>{error.message}</ErrorMessage>}
     </div>
   );
 }

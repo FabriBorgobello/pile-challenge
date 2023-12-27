@@ -5,7 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'text';
 }
 
-// Use forwardRef to pass the ref down to the button element
+// Use forwardRef to pass the ref down to the button element (used on Radix UI)
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = 'primary', ...restProps }, ref) => {
   return (
     <button

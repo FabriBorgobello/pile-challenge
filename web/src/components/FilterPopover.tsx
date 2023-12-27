@@ -52,6 +52,7 @@ export function FilterPopover() {
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
               <BalanceFilter />
+              {/* NOTE: More filters could be easily added here just by adding more components and including them in the form */}
               <Button className="mt-6 w-full text-xs" type="submit">
                 Apply
               </Button>

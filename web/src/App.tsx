@@ -1,4 +1,4 @@
-import { lazy,Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { AccountSection } from './components/AccountSection';
@@ -17,27 +17,33 @@ const SEPAForm = lazy(() => import('./components/SEPAForm'));
 
 function App() {
   return (
+    <Wrappers>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
+          <NavBar />
+          <Title>Welcome back, John!</Title>
+          <TotalBalance />
+          <Actions />
+          <AccountSection />
+          <hr className="border-gray-200 dark:border-gray-800" />
+          <Modal>
+            <Suspense fallback={<SEPAFormSkeleton />}>
+              <SEPAForm />
+            </Suspense>
+          </Modal>
+          <Toaster />
+        </div>
+        <Footer />
+      </div>
+    </Wrappers>
+  );
+}
+
+function Wrappers({ children }: { children: React.ReactNode }) {
+  return (
     <ModalProvider>
       <AccountsProvider>
-        <BalanceProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
-              <NavBar />
-              <Title>Welcome back, John!</Title>
-              <TotalBalance />
-              <Actions />
-              <AccountSection />
-              <hr className="border-gray-200 dark:border-gray-800" />
-              <Modal>
-                <Suspense fallback={<SEPAFormSkeleton />}>
-                  <SEPAForm />
-                </Suspense>
-              </Modal>
-              <Toaster />
-            </div>
-            <Footer />
-          </div>
-        </BalanceProvider>
+        <BalanceProvider>{children}</BalanceProvider>
       </AccountsProvider>
     </ModalProvider>
   );
