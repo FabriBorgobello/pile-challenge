@@ -43,6 +43,13 @@ export default function SEPAForm() {
   const errors = formState.errors;
 
   const onSubmit = async (data: TransferInsert) => {
+    // Check if the user has enough money in the account
+    const availableBalance = accounts.find((account) => account.id === data.source)?.balances.available.value;
+    if (availableBalance && data.amount > availableBalance) {
+      toast.error("You don't have enough money in your account.");
+      return;
+    }
+
     try {
       const res = await fetch('http://localhost:3000/transfer', {
         method: 'POST',
