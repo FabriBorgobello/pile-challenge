@@ -13,7 +13,9 @@ export function AccountList({ accounts, count, decrementOffset, incrementOffset,
   return (
     <>
       {count === 0 ? (
-        <p className="text-center text-black dark:text-white">No accounts found.</p>
+        <p className="text-center text-black dark:text-white" data-testid="account-empty-state">
+          No accounts found.
+        </p>
       ) : (
         <>
           <p className="text-center text-black dark:text-white">
@@ -47,7 +49,7 @@ export function AccountListSkeleton() {
   return (
     <ul
       className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
-      data-testid="account-list"
+      data-testid="account-list-skeleton"
     >
       {Array.from({ length: 10 }).map((_, index) => (
         <AccountItemSkeleton key={index} />

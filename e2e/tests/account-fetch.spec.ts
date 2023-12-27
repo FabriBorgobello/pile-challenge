@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:5173');
+  await page.goto('/');
 });
 
 test.describe('Account fetch and paginaton', () => {
@@ -15,6 +15,32 @@ test.describe('Account fetch and paginaton', () => {
     // Dynamic content
     await expect(page.getByTestId('total-balance')).toBeVisible();
     await expect(page.getByTestId('account-list')).toBeVisible();
+  });
+
+  test('displays empty state when no accounts are found', async ({ page }) => {
+    // Mock the API response
+    await page.route('http://localhost:3000/account**', async (route) => {
+      await route.fulfill({
+        json: { accounts: [], highestBalance: 0, count: 0 },
+      });
+    });
+
+    await page.reload();
+    await expect(page.getByTestId('account-list')).not.toBeVisible();
+    await expect(page.getByTestId('account-list-skeleton')).not.toBeVisible();
+    await expect(page.getByTestId('account-empty-state')).toBeVisible();
+  });
+
+  test('displays an error when the API fails', async ({ page }) => {
+    // Mock the API response
+    const ERROR_MESSAGE = 'Not found';
+    await page.route('http://localhost:3000/account**', async (route) => {
+      await route.fulfill({ status: 404, contentType: 'text/plain', body: ERROR_MESSAGE });
+    });
+    await page.reload();
+    const errorFallback = page.getByTestId('error-fallback');
+    await expect(errorFallback).toBeVisible();
+    await expect(errorFallback).toContainText(ERROR_MESSAGE);
   });
 
   test('account fetch and pagination', async ({ page }) => {

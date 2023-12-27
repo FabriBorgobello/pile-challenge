@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Account } from '@/types';
 
-const BASE_URL = import.meta.env.API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
 
 export function useTransferAccounts() {
   const [accounts, setAccounts] = useState<Account[]>([]);

@@ -16,7 +16,13 @@ import { ModalProvider } from '@/context/ModalContext';
 import { AccountSection } from './components/AccountSection';
 import { ErrorFallback } from './components/ErrorComponent';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: import.meta.env.VITE_E2E ? false : 3,
+    },
+  },
+});
 
 const SEPAForm = lazy(() => import('@/components/SEPAForm'));
 const TotalBalance = lazy(() => import('@/components/TotalBalance'));
@@ -27,6 +33,7 @@ function App() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
           <NavBar />
+          <Title>Hello {String(import.meta.env.E2E)}</Title>
           <Title>Welcome back, John!</Title>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<TotalBalanceSkeleton />}>
