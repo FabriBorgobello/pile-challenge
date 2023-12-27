@@ -50,11 +50,12 @@ export default function SEPAForm() {
         body: JSON.stringify(data),
       });
       if (!res.ok) {
+        console.log(res);
         throw new Error('Something went wrong');
       }
       closeModal();
       toast.success('Transfer successful', { duration: 5000 });
-      window.location.reload();
+      // TODO: Update accounts
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Something went wrong. Please try again later.');
     }
@@ -69,6 +70,9 @@ export default function SEPAForm() {
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="source">From</Label>
           <Select error={Boolean(errors.source)} id="source" {...register('source')}>
+            <option disabled value="">
+              Select an account
+            </option>
             {accounts.map((account) => (
               <option key={account.id} className="flex justify-between" value={account.id}>
                 {account.name} - (
@@ -82,6 +86,7 @@ export default function SEPAForm() {
           error={errors.amount}
           id="amount"
           label="Amount (€)"
+          min={1}
           register={register('amount', { valueAsNumber: true, min: 1 })}
           type="number"
         />

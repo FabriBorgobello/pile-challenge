@@ -25,7 +25,7 @@ export function Modal({ children }: { children: React.ReactNode }) {
       {isModalOpen && (
         <div
           ref={modalContentRef}
-          className="relative w-96 rounded-lg border border-gray-700 bg-white shadow-2xl dark:bg-gray-900"
+          className="relative max-h-screen w-96 overflow-y-auto rounded-lg border border-gray-700 bg-white shadow-2xl dark:bg-gray-900"
         >
           {children}
           <button
