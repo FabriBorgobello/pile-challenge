@@ -3,7 +3,7 @@ import { Account } from '@/types';
 export function AccountItem({ account }: { account: Account }) {
   return (
     <li
-      className="flex flex-col gap-y-2 rounded-md border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-800"
+      className="flex flex-col gap-y-2 rounded-md border border-gray-200 bg-white p-4 transition-colors  hover:bg-opacity-70 dark:border-gray-800 dark:bg-gray-800"
       data-testid="account-item"
     >
       <div className="flex items-center justify-between">
