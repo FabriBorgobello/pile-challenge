@@ -5,33 +5,32 @@ import { useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { useAccounts } from '@/hooks/useAccounts';
+import { UseAccounts, useAccounts } from '@/hooks/useAccounts';
 import { accountQuerySchema } from '@/schemas/accountFilters.schema';
+import { FilterValues } from '@/types';
 import { formatCurrency } from '@/utils';
 
 import { Button } from './Button';
 import { ErrorMessage } from './ErrorMessage';
 import { PrimaryText, SecondaryText } from './Typography';
 
-interface FilterValues {
-  minBalance: number;
-  maxBalance: number;
-}
-
-export function FilterPopover() {
-  const { highestBalance, applyFilters } = useAccounts();
+export function FilterPopover({
+  highestBalance,
+  balanceRange,
+  setBalanceRange,
+}: Pick<UseAccounts, 'highestBalance' | 'setBalanceRange' | 'balanceRange'>) {
   const [open, setOpen] = useState(false);
   const methods = useForm<FilterValues>({
     values: {
-      minBalance: 0,
-      maxBalance: highestBalance || 0,
+      minBalance: balanceRange.minBalance || 0,
+      maxBalance: Math.min(balanceRange.maxBalance || highestBalance, highestBalance),
     },
     resolver: zodResolver(accountQuerySchema),
   });
 
   async function onSubmit(data: FilterValues) {
     try {
-      applyFilters({ ...data });
+      setBalanceRange(data);
       setOpen(false);
       toast.success('Filter applied');
     } catch (error) {
@@ -39,10 +38,19 @@ export function FilterPopover() {
     }
   }
 
+  const hasFilters = balanceRange.minBalance !== 0 || balanceRange.maxBalance !== Number.MAX_SAFE_INTEGER;
+
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <Button variant="text">Filter</Button>
+        <Button variant="text">
+          Filter{' '}
+          {hasFilters && (
+            <span className="text-xs text-gray-400 dark:text-gray-500">
+              ({balanceRange.minBalance} - {balanceRange.maxBalance})
+            </span>
+          )}
+        </Button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content

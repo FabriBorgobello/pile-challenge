@@ -41,25 +41,42 @@ export default function SEPAForm() {
   const queryClient = useQueryClient();
   const accounts = useTransferAccounts();
   const { closeModal } = useModal();
+
+  /** React Hook Form methods */
+  const { handleSubmit, register, formState, reset } = useForm<TransferInsert>({
+    defaultValues,
+    resolver,
+    mode: 'onBlur',
+  });
+  const errors = formState.errors;
+
+  /** Mutation to send the transfer */
   const mutation = useMutation({
-    mutationFn: (data: TransferInsert) =>
-      fetch('http://localhost:3000/transfer', {
+    mutationFn: async (data: TransferInsert) => {
+      const res = await fetch('http://localhost:3000/transfer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-      }),
+      });
+      if (!res.ok) throw new Error('An error occurred. Please reload the page and try again.');
+      return res.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['balance'] });
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
-
       closeModal();
       toast.success('Transfer successful', { duration: 5000 });
     },
+    onError: (error) => {
+      toast.error(error.message);
+      reset();
+    },
   });
 
-  const { handleSubmit, register, formState } = useForm<TransferInsert>({ defaultValues, resolver, mode: 'onBlur' });
-  const errors = formState.errors;
-
+  /**
+   * Form submit handler
+   * Validations that are not covered by the resolver are done here
+   */
   const onSubmit = async (data: TransferInsert) => {
     // Check if the user has enough money in the account
     const availableBalance = accounts.find((account) => account.id === data.source)?.balances.available.value;
@@ -70,6 +87,7 @@ export default function SEPAForm() {
 
     mutation.mutate(data);
   };
+
   return (
     <div className="flex flex-col gap-y-8 p-4 sm:p-8" data-testid="sepa-form">
       <div>

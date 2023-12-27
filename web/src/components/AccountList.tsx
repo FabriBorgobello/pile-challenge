@@ -1,11 +1,14 @@
-import { useAccounts } from '@/hooks/useAccounts';
+import { useErrorBoundary } from 'react-error-boundary';
+
+import { UseAccounts } from '@/hooks/useAccounts';
 import { Account } from '@/types';
 
 import { AccountItem, AccountItemSkeleton } from './AccountItem';
 import { Pagination } from './Pagination';
 
-export default function AccountList() {
-  const { accounts, count, limit, offset, incrementOffset, decrementOffset } = useAccounts();
+export function AccountList({ accounts, count, decrementOffset, incrementOffset, limit, offset, error }: UseAccounts) {
+  const { showBoundary } = useErrorBoundary();
+  if (error) showBoundary(error);
 
   return (
     <>

@@ -23,37 +23,41 @@ const TotalBalance = lazy(() => import('@/components/TotalBalance'));
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Wrappers>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
-            <NavBar />
-            <Title>Welcome back, John!</Title>
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Suspense fallback={<TotalBalanceSkeleton />}>
-                <TotalBalance />
-              </Suspense>
-            </ErrorBoundary>
-            <Actions />
-            <AccountSection />
-            <hr className="border-gray-200 dark:border-gray-800" />
-            <Modal>
-              <Suspense fallback={<SEPAFormSkeleton />}>
-                <SEPAForm />
-              </Suspense>
-            </Modal>
-            <Toaster />
-          </div>
-          <Footer />
+    <Wrappers>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto flex  max-w-4xl flex-col gap-y-8 px-4 pb-8 pt-4 sm:pb-20 sm:pt-8">
+          <NavBar />
+          <Title>Welcome back, John!</Title>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<TotalBalanceSkeleton />}>
+              <TotalBalance />
+            </Suspense>
+          </ErrorBoundary>
+          <Actions />
+          <AccountSection />
+          <hr className="border-gray-200 dark:border-gray-800" />
+          <Modal>
+            <Suspense fallback={<SEPAFormSkeleton />}>
+              <SEPAForm />
+            </Suspense>
+          </Modal>
+          <Toaster />
         </div>
-      </Wrappers>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+        <Footer />
+      </div>
+    </Wrappers>
   );
 }
 
 function Wrappers({ children }: { children: React.ReactNode }) {
-  return <ModalProvider>{children}</ModalProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ModalProvider>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} position="right" />
+      </ModalProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

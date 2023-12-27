@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 type ModalContextType = {
   isModalOpen: boolean;
@@ -17,6 +17,21 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // Close modal on escape key press
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
 
   return <ModalContext.Provider value={{ isModalOpen, openModal, closeModal }}>{children}</ModalContext.Provider>;
 };

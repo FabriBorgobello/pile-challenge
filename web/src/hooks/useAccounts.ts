@@ -1,7 +1,7 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { Account } from '@/types';
+import { Account, FilterValues } from '@/types';
 
 interface AccountsResponse {
   accounts: Account[];
@@ -9,8 +9,13 @@ interface AccountsResponse {
   count: number;
 }
 
-async function getAccounts(limit: number, offset: number): Promise<AccountsResponse> {
-  const params = new URLSearchParams({ limit: limit.toString(), offset: offset.toString() });
+async function getAccounts(limit: number, offset: number, filters: FilterValues): Promise<AccountsResponse> {
+  const params = new URLSearchParams({
+    limit: limit.toString(),
+    offset: offset.toString(),
+    minBalance: filters.minBalance.toString(),
+    maxBalance: filters.maxBalance.toString(),
+  });
   const res = await fetch(`http://localhost:3000/account?${params}`);
   if (!res.ok) {
     switch (res.status) {
@@ -27,13 +32,33 @@ async function getAccounts(limit: number, offset: number): Promise<AccountsRespo
   return res.json();
 }
 
-export const useAccounts = (initialLimit = 10, initialOffset = 0) => {
+export interface UseAccounts {
+  accounts: Account[];
+  highestBalance: number;
+  count: number;
+  limit: number;
+  offset: number;
+  isLoading: boolean;
+  error: Error | null;
+  setLimit: (limit: number) => void;
+  setOffset: (offset: number) => void;
+  incrementOffset: () => void;
+  decrementOffset: () => void;
+  balanceRange: FilterValues;
+  setBalanceRange: (balanceRange: FilterValues) => void;
+}
+
+export const useAccounts = (initialLimit = 10, initialOffset = 0): UseAccounts => {
   const [limit, setLimit] = useState(initialLimit);
   const [offset, setOffset] = useState(initialOffset);
+  const [balanceRange, setBalanceRange] = useState<FilterValues>({
+    minBalance: 0,
+    maxBalance: Number.MAX_SAFE_INTEGER,
+  });
 
-  const { data, isLoading, error } = useSuspenseQuery({
-    queryKey: ['accounts', limit, offset],
-    queryFn: () => getAccounts(limit, offset),
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['accounts', limit, offset, { ...balanceRange }],
+    queryFn: () => getAccounts(limit, offset, balanceRange),
   });
 
   const totalCount = data ? data.count : 0;
@@ -59,5 +84,7 @@ export const useAccounts = (initialLimit = 10, initialOffset = 0) => {
     setOffset,
     incrementOffset,
     decrementOffset,
+    balanceRange,
+    setBalanceRange,
   };
 };
