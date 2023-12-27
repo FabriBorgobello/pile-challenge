@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { Account, FilterValues } from '@/types';
 
+const BASE_URL = import.meta.env.API_BASE_URL ?? 'http://localhost:3000';
+
 interface AccountsResponse {
   accounts: Account[];
   highestBalance: number;
@@ -16,7 +18,7 @@ async function getAccounts(limit: number, offset: number, filters: FilterValues)
     minBalance: filters.minBalance.toString(),
     maxBalance: filters.maxBalance.toString(),
   });
-  const res = await fetch(`http://localhost:3000/account?${params}`);
+  const res = await fetch(`${BASE_URL}/account?${params}`);
   if (!res.ok) {
     switch (res.status) {
       case 401:

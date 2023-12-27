@@ -37,6 +37,8 @@ const defaultValues: TransferInsert = {
  */
 const resolver = zodResolver(transferInsertSchema);
 
+const BASE_URL = import.meta.env.API_BASE_URL ?? 'http://localhost:3000';
+
 export default function SEPAForm() {
   const queryClient = useQueryClient();
   const accounts = useTransferAccounts();
@@ -53,7 +55,7 @@ export default function SEPAForm() {
   /** Mutation to send the transfer */
   const mutation = useMutation({
     mutationFn: async (data: TransferInsert) => {
-      const res = await fetch('http://localhost:3000/transfer', {
+      const res = await fetch(`${BASE_URL}/transfer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -81,7 +83,7 @@ export default function SEPAForm() {
     // Check if the user has enough money in the account
     const availableBalance = accounts.find((account) => account.id === data.source)?.balances.available.value;
     if (availableBalance && data.amount > availableBalance) {
-      toast.error("You don't have enough money in your account.");
+      toast.error("You don't have enough money in this account.");
       return;
     }
 
