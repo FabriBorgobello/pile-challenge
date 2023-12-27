@@ -12,15 +12,25 @@ export function AccountList({ accounts, count, decrementOffset, incrementOffset,
 
   return (
     <>
-      <ul
-        className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
-        data-testid="account-list"
-      >
-        {accounts.map((account: Account) => (
-          <AccountItem key={account.id} account={account} />
-        ))}
-      </ul>
-      {count > 0 && (
+      {count === 0 ? (
+        <p className="text-center text-black dark:text-white">No accounts found.</p>
+      ) : (
+        <>
+          <p className="text-center text-black dark:text-white">
+            Showing {offset + 1} - {offset + limit} of {count} accounts
+          </p>
+          <ul
+            className="mt-4 flex max-h-[600px] flex-col gap-y-4 overflow-y-scroll rounded-md pb-4"
+            data-testid="account-list"
+          >
+            {accounts.map((account: Account) => (
+              <AccountItem key={account.id} account={account} />
+            ))}
+          </ul>
+        </>
+      )}
+
+      {count > limit && (
         <Pagination
           count={count}
           decrementOffset={decrementOffset}

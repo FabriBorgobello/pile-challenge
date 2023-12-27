@@ -47,7 +47,7 @@ export function FilterPopover({
           Filter{' '}
           {hasFilters && (
             <span className="text-xs text-gray-400 dark:text-gray-500">
-              ({balanceRange.minBalance} - {balanceRange.maxBalance})
+              (€ {balanceRange.minBalance} - {balanceRange.maxBalance})
             </span>
           )}
         </Button>
