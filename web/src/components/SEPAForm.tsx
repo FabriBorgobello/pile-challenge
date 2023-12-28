@@ -55,8 +55,9 @@ export default function SEPAForm() {
   /** Mutation to send the transfer */
   const mutation = useMutation({
     mutationFn: async (data: TransferInsert) => {
-      const res = await fetch(`${BASE_URL}/transfer`, {
-        method: 'POST',
+      const accountID = data.source;
+      const res = await fetch(`${BASE_URL}/account/${accountID}/transfer`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
@@ -127,6 +128,7 @@ export default function SEPAForm() {
           label="Amount (€)"
           min={1}
           register={register('amount', { valueAsNumber: true, min: 1 })}
+          step={0.01}
           type="number"
         />
         <FormInput error={errors.recipient} id="recipient" label="Recipient name" register={register('recipient')} />

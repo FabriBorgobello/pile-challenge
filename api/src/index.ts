@@ -4,7 +4,6 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
 import { accountRouter } from '@/account/account.route';
-import { transferRouter } from '@/transfer/transfer.route';
 import { ApiError } from '@/utils/ApiError';
 
 const app = new Hono();
@@ -15,7 +14,6 @@ app.use('*', cors());
 
 /** Routers */
 app.route('/account', accountRouter);
-app.route('/transfer', transferRouter);
 
 /** Root endpoint */
 app.get('/', (c) => c.text('Pile Capital coding challenge API'));

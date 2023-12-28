@@ -61,7 +61,7 @@ test.describe('SEPA transfers', () => {
 
   test('displays an error message in case of failure', async ({ page }) => {
     // Mock the API response to return an error
-    await page.route('http://localhost:3000/transfer**', async (route) => {
+    await page.route('http://localhost:3000/account/**/transfer**', async (route) => {
       await route.fulfill({
         json: { error: 'Insufficient funds' },
         status: 400,

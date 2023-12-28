@@ -20,6 +20,10 @@ export async function getAccounts(filter: AccountFilter) {
 
 export async function transfer(id: Account['id'], transfer: TransferCreate) {
   const account = db.transfer(id, transfer.amount);
+
+  console.log('\x1b[32m%s\x1b[0m', `✅ Transfer ${transfer.amount} from account ${id}`, '\x1b[0m');
+  console.log(transfer);
+
   return account;
 }
 
