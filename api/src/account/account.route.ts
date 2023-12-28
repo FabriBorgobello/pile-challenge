@@ -2,8 +2,8 @@ import { Hono } from 'hono';
 
 import { InvalidZodError } from '@/utils/ApiError';
 
-import { getAccounts, getBalance, updateBalance } from './account.controller';
-import { accountFilterSchema } from './account.schema';
+import { getAccounts, getBalance, transfer } from './account.controller';
+import { accountFilterSchema, TransferCreate, transferCreateSchema } from './account.schema';
 
 export const accountRouter = new Hono();
 
@@ -20,10 +20,11 @@ accountRouter.get('/', async (c) => {
 });
 
 /** Update account balance */
-accountRouter.put('/:id/balance', async (c) => {
+accountRouter.put('/:id/transfer', async (c) => {
   const id = c.req.param('id');
-  const body = await c.req.json<{ balance: number }>();
-  const account = await updateBalance(id, body.balance);
+  const body = await c.req.json<TransferCreate>();
+  const parsed = transferCreateSchema.parse(body);
+  const account = await transfer(id, parsed);
   return c.json(account);
 });
 

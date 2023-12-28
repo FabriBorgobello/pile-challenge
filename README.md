@@ -8,6 +8,8 @@ This project is a coding challenge created by Fabricio Borgobello for Pile Capit
 
 This coding challenge is organized as an NPM workspace containing three independent packages: `web`, `api`, and `e2e`. Each of these packages is self-contained and does not share code with the others. To interact with the application, each package should be initialized individually. This structure ensures modularity and separation of concerns, allowing for focused development and testing in each aspect of the application.
 
+IMPORTANT: This project does not contain any database. All data is stored in memory and will be lost when the server is restarted.
+
 ## Tech Stack
 
 ### Frontend

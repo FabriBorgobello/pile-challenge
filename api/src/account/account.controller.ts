@@ -1,57 +1,38 @@
-import { InvalidZodError, NotFoundError } from '@/utils/ApiError';
+import { DataBase } from '@/database';
+import { NotFoundError } from '@/utils/ApiError';
 
-import { Account, AccountFilter, balanceSchema } from './account.schema';
-import { data } from './accounts.json';
+import { Account, AccountFilter, TransferCreate } from './account.schema';
 
-const accounts: Account[] = data;
+const db = new DataBase();
 
-export async function getAccounts({ minBalance, maxBalance, limit, offset }: AccountFilter) {
-  // Filter accounts based on balance criteria
-  const filteredAccounts = data.filter((account) => {
-    const balance = account.balances.available.value;
-    return balance >= minBalance && balance <= maxBalance;
-  });
+export async function getAccounts(filter: AccountFilter) {
+  const { minBalance, maxBalance, limit, offset } = filter;
 
-  // Implement pagination
-  const paginatedAccounts = filteredAccounts.slice(offset, offset + limit);
-
-  // Calculate highest balance (consider doing this once as a separate operation if data changes infrequently)
-  const highestBalance = data.reduce((acc, account) => {
-    return Math.max(acc, account.balances.available.value);
-  }, 0);
+  const filteredAccounts = db.getFilteredAccounts(minBalance, maxBalance);
+  const paginatedAccounts = db.getPaginatedAccounts(filteredAccounts, limit, offset);
 
   return {
     accounts: paginatedAccounts,
-    highestBalance,
-    count: filteredAccounts.length, // total count of filtered accounts
+    highestBalance: db.getHighestBalance(),
+    count: filteredAccounts.length,
   };
 }
 
-export async function updateBalance(id: Account['id'], balance: number) {
-  // Validate balance according to our predefined schema
-  const safeBalance = balanceSchema.safeParse(balance);
-  if (!safeBalance.success) {
-    throw new InvalidZodError(safeBalance.error);
-  }
-  // Query the database for the account
-  const account = accounts.find((a) => a.id === id);
-  if (!account) {
-    throw new NotFoundError(`Account ${id} not found`);
-  }
-
-  account.balances.available.value = Number(safeBalance.data.toFixed(2));
+export async function transfer(id: Account['id'], transfer: TransferCreate) {
+  const account = db.transfer(id, transfer.amount);
   return account;
 }
 
 export async function getBalance() {
-  const total = accounts.reduce((acc, account) => {
-    return acc + account.balances.available.value;
-  }, 0);
-  return { balance: total, currency: 'EUR', count: accounts.length };
+  return {
+    balance: db.getTotalBalance(),
+    currency: 'EUR',
+    count: db.getAccounts().length,
+  };
 }
 
 export async function getAccount(id: Account['id']) {
-  const account = accounts.find((a) => a.id === id);
+  const account = db.getAccount(id);
   if (!account) {
     throw new NotFoundError(`Account ${id} not found`);
   }
